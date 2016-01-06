@@ -32,6 +32,7 @@ Board.prototype.addUsers = function(users){
     });
 };
 
+// Pulling logic out of addUsers would slow it down a little
 Board.prototype.checkCollisions = function(){
 
 };

@@ -18,6 +18,7 @@ Io(server)
     .on('connection', function(socket){
         var user = new User({
             socket: socket,
+            game: game,
         });
         game.addUser(user);
         socket.on('disconnect', function(){

@@ -12,7 +12,14 @@ Segment.prototype.collideWith = function(things){
             this.snake.length++;
             things[i].delete();
         }
-        if(things[i].type === 'snake'){
+        if(things[i].type === 'segment'){
+
+            if(things[i].index === 0){
+                things[i].snake.user.remove();
+            }
+            if(this.index === 0){
+                this.snake.user.remove();
+            }
 
         }
     }

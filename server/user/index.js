@@ -12,8 +12,13 @@ function User(options){
         initVel: {x:0, y:0},
         grow: 0,
     });
+    this.game = options.game
     this.socket.on('command', this.commandHandler.bind(this));
 }
+
+User.prototype.remove = function(){
+    this.game.removeUser(this);
+};
 
 User.prototype.tick = function(){
     this.snake.tick();

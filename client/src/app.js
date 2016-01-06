@@ -10,7 +10,7 @@ var Renderer = require('./renderer');
 
 var rootContainer = new PIXI.Container();
 var renderer = new Renderer();
-var viewBounds = [-750, -750, 750, 750];
+var viewBounds = [-1250, -1250, 1250, 1250];
 var keyState = {
     vel: {x:0,y:0},
     zoom: {},

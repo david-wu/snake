@@ -34,7 +34,9 @@ Game.prototype.tick = function(){
 
     var state = this.state();
     _.each(this.users, function(user){
-        user.sendState(state);
+        if(user){
+            user.sendState(state);
+        }
     });
 };
 

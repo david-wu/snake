@@ -13,6 +13,7 @@ function Snake(options){
 
 Snake.prototype.addSegment = function(initPos, initVel){
     this.segments.push(new Segment({
+        type: 'segment',
         snake: this,
         pos: initPos || {x:0, y:0},
         vel: initVel || {x:0, y:0},
