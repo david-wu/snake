@@ -5,8 +5,8 @@ var Game = require('./game');
 var User = require('./user');
 
 
-var app = strapApp(express());
 var game = new Game().start();
+var app = strapApp(express());
 var server = http.createServer();
 
 
@@ -25,7 +25,7 @@ Io(server)
         });
     });
 
-server.listen(9090);
+server.listen(9999);
 
 
 function strapApp(app){

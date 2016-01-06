@@ -3,17 +3,16 @@ var Snake = require('./snake.js');
 
 var userId = 0;
 function User(options){
-    this.socket = options.socket;
-    this.game = options.game;
     this.id = userId++;
+    this.socket = options.socket;
     this.name = 'player_' + this.id;
     this.snake = new Snake({
+        user: this,
         initPos: {x:0, y:0},
         initVel: {x:0, y:0},
-        grow: 3
+        grow: 0,
     });
-
-    this.socket.on('command', this.commandHandler.bind(this))
+    this.socket.on('command', this.commandHandler.bind(this));
 }
 
 User.prototype.tick = function(){
@@ -24,17 +23,30 @@ User.prototype.sendState = function(state){
     this.socket.emit('state', state);
 };
 
-User.prototype.commandHandler = function(command){
+User.prototype.commandHandler = function(command, callback){
     if(command.type === 'setVel'){
         _.extend(this.snake.segments[0].vel, command.vel);
-    }else if(command.type === 'newSnake'){
-        this.snake = new Snake({
-            initPos: command.pos,
-            initVel: command.vel,
-            grow: command.grow,
-        });
+    }
+    // else if(command.type === 'newSnake'){
+    //     this.snake = new Snake({
+    //         initPos: command.pos,
+    //         initVel: command.vel,
+    //         grow: command.grow,
+    //     });
+    //     callback(this.snake)
+    // }
+    else if(command.type === 'setName'){
+        this.name = command.value;
     }
 };
 
+
+User.prototype.state = function(){
+    return {
+        id: this.id,
+        snake: this.snake.state(),
+        name: this.name,
+    };
+};
 
 module.exports = User;

@@ -1,8 +1,8 @@
 
 
 function Stage(options){
-    _.extend(this, options)
-    this.container = new PIXI.Container()
+    _.extend(this, options);
+    this.container = new PIXI.Container();
 
     if(this.context){
         this.context.addChild(this.container);
@@ -27,7 +27,7 @@ function Stage(options){
             that.viewBounds[2]+=horizontalScrollAmount;
         }
         that.transformContainer();
-    }, 16)
+    }, 16);
 }
 
 Stage.prototype.transformContainer = function(){
@@ -39,6 +39,10 @@ Stage.prototype.transformContainer = function(){
 
     this.container.position.x = -this.viewBounds[0]*xScale;
     this.container.position.y = -this.viewBounds[1]*yScale;
-}
+};
+
+Stage.prototype.render = function(){
+    this.renderer.render(this.context);
+};
 
 module.exports = Stage;

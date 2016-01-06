@@ -1,4 +1,8 @@
 
+
+
+
+
 function User(options){
     this.id = options.id;
     this.name = options.name;
@@ -7,7 +11,6 @@ function User(options){
     this.viewBounds = options.viewBounds;
     this.container = new PIXI.Container();
     this.snakeSprites = [];
-
     this.snakeBodySpritePath = './lemon.jpg'
 
     this.drawSnake();
@@ -18,6 +21,7 @@ User.prototype.tick = function(){
 };
 
 User.prototype.drawSnake = function(){
+    if(!this.snake || !this.snake.length){return;}
     for(var i = 0; i < this.snake.length; i++){
         this.drawSnakeSegment(i, this.snake[i]);
     }
@@ -34,6 +38,6 @@ User.prototype.drawSnakeSegment = function(i, segment){
     }
     this.snakeSprites[i].position.x = this.snake[i].pos.x * 50;
     this.snakeSprites[i].position.y = this.snake[i].pos.y * 50;
-}
+};
 
 module.exports = User;
