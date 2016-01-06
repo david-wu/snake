@@ -1,4 +1,7 @@
 
+
+
+
 function Food(options){
     this.id = options.id;
     this.container = new PIXI.Container();

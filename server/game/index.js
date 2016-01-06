@@ -18,7 +18,7 @@ Game.prototype.removeUser = function(user){
 };
 
 Game.prototype.start = function(){
-    setInterval(this.tick.bind(this), 100);
+    setInterval(this.tick.bind(this), 50);
     setInterval(this.spawnFood.bind(this), 2000);
     return this;
 };

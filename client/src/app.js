@@ -1,7 +1,7 @@
 _ = require('lodash');
 var io = require('socket.io-client');
-var UserGroup = require('./userGroup');
-var FoodGroup = require('./foodGroup');
+var FoodGroup = require('./unitGroups/foodGroup');
+var UserGroup = require('./unitGroups/userGroup');
 var Stage = require('./stage');
 var Hud = require('./hud');
 var KeyListener = require('./keyListener.js')
@@ -21,19 +21,24 @@ var stage = new Stage({
     renderer: renderer,
     viewBounds: viewBounds,
     zoom: keyState.zoom,
-    centerOn: function(){}
+    centerPos: function(){
+        if(!_.values(userGroup.contents)[0]){return {x:0, y:0};}
+        var snake = _.values(userGroup.contents)[0].snake;
+        return snake[0].pos;
+    },
 });
 
-var userGroup = new UserGroup({context: stage.container});
 var foodGroup = new FoodGroup({context: stage.container});
+var userGroup = new UserGroup({context: stage.container});
 
 var socket = io.connect(location.origin);
 socket.on('state', function(res){
-    userGroup.updateState(res.users);
     foodGroup.updateState(res.foods);
+    userGroup.updateState(res.users);
 });
 
 
+// This could be simpler
 var kl = new KeyListener(keyState);
 kl.addTrigger({
     condition: function(state){
@@ -46,19 +51,17 @@ kl.addTrigger({
         });
     },
 });
+kl.addTrigger({
+    condition: function(state, upDown){
+        return upDown === 'down' && state.f;
+    },
+    callback: function(state){
+        renderer.toggleScreen();
+    },
+});
 
 
 setInterval(function(){
-    // Centers view on first snake
-    if(!_.values(userGroup.users)[0]){return;}
-    var snake = _.values(userGroup.users)[0].snake;
-    var center = snake[0].pos;
-    var width = viewBounds[2]-viewBounds[0];
-    var height = viewBounds[3]-viewBounds[1];
-    viewBounds[0] = (center.x*20)-(width/2)
-    viewBounds[1] = (center.y*20)-(height/2)
-    viewBounds[2] = (center.x*20)+(width/2)
-    viewBounds[3] = (center.y*20)+(height/2)
     stage.render();
 }, 16)
 

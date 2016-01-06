@@ -31,8 +31,10 @@ KeyListener.prototype.keyDownHandler = function(e){
         this.state.zoom.out = true;
     }else if(e.keyCode === 69){
         this.state.zoom.in = true;
+    }else if(e.keyCode === 70){
+        this.state.f = true;
     }
-    this.checkTriggers();
+    this.checkTriggers('down');
 };
 
 KeyListener.prototype.keyUpHandler = function(e){
@@ -40,26 +42,23 @@ KeyListener.prototype.keyUpHandler = function(e){
         this.state.zoom.out = false;
     }else if(e.keyCode === 69){
         this.state.zoom.in = false;
+    }else if(e.keyCode === 70){
+        this.state.f = false;
     }
-    this.checkTriggers();
+    this.checkTriggers('up');
 };
 
 KeyListener.prototype.addTrigger = function(trigger){
     this.triggers.push(trigger);
-
-}
-
-KeyListener.prototype.checkTriggers = function(){
-    var that = this;
-    _.each(this.triggers, function(trigger){
-        that.execTrigger(trigger);
-    });
 };
 
-KeyListener.prototype.execTrigger = function(trigger){
-    if(trigger.condition(this.state)){
-        trigger.callback(this.state);
-    }
+KeyListener.prototype.checkTriggers = function(upDown){
+    var that = this;
+    _.each(this.triggers, function(trigger){
+        if(trigger.condition(that.state, upDown)){
+            trigger.callback(that.state, upDown);
+        }
+    });
 };
 
 module.exports = KeyListener;
