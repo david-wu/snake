@@ -13,16 +13,13 @@ Segment.prototype.collideWith = function(things){
             things[i].remove();
         }
         if(things[i].type === 'segment'){
-
             if(things[i].index === 0){
                 things[i].snake.user.remove();
-            }
-            if(this.index === 0){
+            }else{
                 this.snake.user.remove();
             }
-
         }
     }
-}
+};
 
 module.exports = Segment;

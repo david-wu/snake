@@ -7,8 +7,8 @@ function Game(){
     this.foods = [];
     this.gameInterval = 50;
 
-    this.maxFoods = 10000;
-    this.foodRange = [[-400, 400],[-400, 400]]
+    this.maxFoods = 5000;
+    this.foodRange = [[-250, 250],[-250, 250]]
     this.spawnMaxFoodInterval = 10;
 
     this.tickCount = 0;
@@ -35,7 +35,7 @@ Game.prototype.tick = function(){
 
     _.each(this.users, function(user){
         if(user){
-            that.updateUsers()
+            that.updateUsers();
         }
     });
 };
@@ -60,6 +60,7 @@ Game.prototype.checkCollisions = function(){
     board.checkCollisions();
 };
 
+// should populate and cache food and users seperately
 Game.prototype.state = function(){
     var state = {
         users: {},
@@ -84,6 +85,7 @@ Game.prototype.updateUsers = function(){
 Game.prototype.addUser = function(user){
     user.remove = this.removeUser.bind(this, user);
     this.users.push(user);
+    // should just send food state
     user.sendState(this.stateCache);
 };
 

@@ -12,19 +12,6 @@ function User(options){
     this.socket.on('command', this.commandHandler.bind(this));
 }
 
-User.prototype.sendState = function(state){
-    if(!state){return;}
-    this.socket.emit('state', state);
-};
-
-User.prototype.sendId = function(){
-    this.socket.emit('myId', this.id);
-};
-
-User.prototype.tick = function(){
-    this.snake.tick();
-};
-
 User.prototype.createSnake = function(){
     return this.snake = new Snake({
         user: this,
@@ -33,12 +20,25 @@ User.prototype.createSnake = function(){
     });
 };
 
+User.prototype.sendId = function(){
+    this.socket.emit('myId', this.id);
+};
+
 User.prototype.commandHandler = function(command, callback){
     if(command.type === 'setVel'){
-        this.snake.segments[0].vel = command.vel
+        this.snake.segments[0].vel = command.vel;
     }else if(command.type === 'newSnake'){
         this.createSnake();
     }
+};
+
+User.prototype.tick = function(){
+    this.snake.tick();
+};
+
+User.prototype.sendState = function(state){
+    if(!state){return;}
+    this.socket.emit('state', state);
 };
 
 User.prototype.state = function(){

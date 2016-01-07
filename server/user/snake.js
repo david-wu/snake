@@ -3,20 +3,18 @@ var Segment = require('./segment.js');
 
 
 function Snake(options){
-    options = options || {};
-
     this.segments = [];
-    this.addSegment(options.initPos, options.initVel);
+    this.addSegment();
     this.size = options.size || 1;
     this.user = options.user;
 }
 
-Snake.prototype.addSegment = function(initPos, initVel){
+Snake.prototype.addSegment = function(){
     this.segments.push(new Segment({
         type: 'segment',
         snake: this,
-        pos: initPos || {x:0, y:0},
-        vel: initVel || {x:0, y:0},
+        pos: {x:0, y:0},
+        vel: {x:0, y:0},
         index: this.segments.length,
     }));
 };
@@ -36,6 +34,7 @@ Snake.prototype.tick = function(){
     head.pos.y += head.vel.y;
 };
 
+// State as far as the client is concerned
 Snake.prototype.state = function(){
     return _.map(this.segments, function(segment){
         return {
