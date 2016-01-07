@@ -28,20 +28,23 @@ var stage = new Stage({
     },
 });
 
+
 var foodGroup = new FoodGroup({context: stage.container});
 var userGroup = new UserGroup({context: stage.container});
 
 var socket = io.connect(location.origin);
+
 socket.on('state', function(res){
     foodGroup.updateState(res.foods);
     userGroup.updateState(res.users);
     stage.center();
     stage.transformContainer();
 });
+
 socket.on('myId', function(id){
     stage.centerPos = function(){
         var user = userGroup.contents[id];
-        var snakeHead = user && user.snake[0];
+        var snakeHead = user && user.snake && user.snake[0];
         if(snakeHead){
             return snakeHead.pos
         }
@@ -49,6 +52,19 @@ socket.on('myId', function(id){
     };
 });
 
+socket.on('updateUsers', function(res){
+    userGroup.updateState(res)
+    stage.center();
+    stage.transformContainer();
+});
+
+socket.on('addFood', function(res){
+    foodGroup.add(foodGroup.createItem(res));
+});
+
+socket.on('removeFood', function(res){
+    foodGroup.remove(res);
+});
 
 var hud = new Hud({
     renderer: renderer,

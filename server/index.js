@@ -21,6 +21,7 @@ Io(server)
         });
 
         game.addUser(user);
+
         socket.on('disconnect', function(){
             game.removeUser(user);
         });

@@ -7,7 +7,7 @@ function Snake(options){
 
     this.segments = [];
     this.addSegment(options.initPos, options.initVel);
-    this.length = options.length || 1;
+    this.size = options.size || 1;
     this.user = options.user;
 }
 
@@ -22,7 +22,7 @@ Snake.prototype.addSegment = function(initPos, initVel){
 };
 
 Snake.prototype.tick = function(){
-    if(this.length > this.segments.length){
+    if(this.size > this.segments.length){
         this.addSegment();
     }
 

@@ -5,6 +5,7 @@ var User = require('./user.js');
 function UserGroup(options){
     this.contents = {};
     this.container = new PIXI.Container();
+    this.itemConstructor = User;
     if(options.context){
         options.context.addChild(this.container)
     }
@@ -13,24 +14,19 @@ function UserGroup(options){
 UserGroup.prototype = Object.create(BaseGroup.prototype);
 UserGroup.prototype.constructor = UserGroup;
 
-UserGroup.prototype.addMissing = function(newState){
-    var that = this;
-    _.each(newState, function(user, userId){
-        if(!that.contents[userId]){
-            that.contents[userId] = new User({
-                id: userId,
-                parent: that,
-                name: user.name,
-            });
-            that.container.addChild(that.contents[userId].container);
-        }
+UserGroup.prototype.createItem = function(user){
+    return new User({
+        id: user.id,
+        parent: this,
+        name: user.name,
     });
 };
 
-UserGroup.prototype.updateExisting = function(newState){
-    _.each(this.contents, function(user, userId){
-        user.snake = newState[userId].snake;
-    });
-};
+UserGroup.prototype.updateItem = function(item){
+    var user = this.contents[item.id]
+    if(user){
+        user.snake = item.snake;
+    }
+}
 
 module.exports = UserGroup;

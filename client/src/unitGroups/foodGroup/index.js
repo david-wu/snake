@@ -13,23 +13,20 @@ function FoodGroup(options){
 FoodGroup.prototype = Object.create(BaseGroup.prototype);
 FoodGroup.prototype.constructor = FoodGroup;
 
-FoodGroup.prototype.addMissing = function(newState){
-    var that = this;
-    _.each(newState, function(food, foodId){
-        if(!that.contents[foodId]){
-            that.contents[foodId] = new Food({
-                id: foodId,
-                name: food.name,
-            });
-            that.container.addChild(that.contents[foodId].container);
-        }
-    });
-};
 
-FoodGroup.prototype.updateExisting = function(newState){
-    _.each(this.contents, function(food, foodId){
-        food.pos = newState[foodId].pos;
+FoodGroup.prototype.createItem = function(food){
+    return new Food({
+        id: food.id,
+        name: food.name,
     });
-};
+}
+
+
+FoodGroup.prototype.updateItem = function(item){
+    var food = this.contents[item.id]
+    if(food){
+        food.pos = item.pos;
+    }
+}
 
 module.exports = FoodGroup;

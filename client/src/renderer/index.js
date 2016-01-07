@@ -7,27 +7,6 @@ function Renderer(){
 
     var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, renderOptions);
 
-    // renderer.view._onMouseDown = [];
-    // renderer.view.onmousedown = function(e){
-    //     _.each(renderer.view._onMouseDown, function(fn){
-    //         fn(e);
-    //     });
-    // };
-
-    // renderer.view._onMouseMove = [];
-    // renderer.view.onmousemove = function(e){
-    //     _.each(renderer.view._onMouseMove, function(fn){
-    //         fn(e);
-    //     });
-    // };
-
-    // renderer.view._onMouseUp = [];
-    // renderer.view.onmouseup = function(e){
-    //     _.each(renderer.view._onMouseUp, function(fn){
-    //         fn(e);
-    //     });
-    // };
-
     renderer.fullScreen = fullScreen;
     renderer.windowScreen = windowScreen;
     renderer.toggleScreen = toggleScreen;

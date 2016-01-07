@@ -9,7 +9,7 @@ function Segment(options){
 Segment.prototype.collideWith = function(things){
     for(var i = 0; i < things.length; things++){
         if(things[i].type === 'food'){
-            this.snake.length++;
+            this.snake.size++;
             things[i].remove();
         }
         if(things[i].type === 'segment'){

@@ -7,23 +7,22 @@ function Game(){
     this.foods = [];
     this.gameInterval = 50;
 
-    this.maxFoods = 2500;
-    this.foodRange = [[-200, 200],[-200, 200]]
-    this.spawnMaxFoodFrequency = 10;
+    this.maxFoods = 10000;
+    this.foodRange = [[-400, 400],[-400, 400]]
+    this.spawnMaxFoodInterval = 10;
 
     this.tickCount = 0;
 }
 
 Game.prototype.start = function(){
-    this.gameInterval = setInterval(this.tick.bind(this), this.gameInterval);
-    setInterval(this.spawnMaxFood.bind(this), this.spawnMaxFoodInterval);
+    setInterval(this.tick.bind(this), this.gameInterval);
     return this;
 };
 
 Game.prototype.tick = function(){
     var that = this;
 
-    if(this.tickCount % this.spawnMaxFoodFrequency === 0){
+    if(this.tickCount % this.spawnMaxFoodInterval === 0){
         this.spawnMaxFood();
     }
     this.tickCount++
@@ -35,7 +34,9 @@ Game.prototype.tick = function(){
     this.stateCache = this.state();
 
     _.each(this.users, function(user){
-        user.sendState(that.stateCache);
+        if(user){
+            that.updateUsers()
+        }
     });
 };
 
@@ -45,7 +46,7 @@ Game.prototype.spawnMaxFood = function(){
 };
 
 Game.prototype.spawnFood = function(){
-    if(this.foods.length >= this.maxFoods){return}
+    if(this.foods.length >= this.maxFoods){return;}
     this.addFood(Food.createRandom({
         xRange: this.foodRange[0],
         yRange: this.foodRange[1],
@@ -73,20 +74,44 @@ Game.prototype.state = function(){
     return state;
 };
 
-Game.prototype.addUser = function(user){
-    user.game = this;
-    this.users.push(user);
+Game.prototype.updateUsers = function(){
+    this.broadcast({
+        tag: 'updateUsers',
+        payload: this.stateCache.users,
+    });
 };
+
+Game.prototype.addUser = function(user){
+    user.remove = this.removeUser.bind(this, user);
+    this.users.push(user);
+    user.sendState(this.stateCache);
+};
+
 Game.prototype.removeUser = function(user){
     _.pull(this.users, user);
 };
 
 Game.prototype.addFood = function(food){
-    food.foods = this.foods;
+    food.remove = this.removeFood.bind(this, food);
     this.foods.push(food);
-}
+    this.broadcast({
+        tag: 'addFood',
+        payload: food.state(),
+    });
+};
+
 Game.prototype.removeFood = function(food){
     _.pull(this.foods, food);
+    this.broadcast({
+        tag: 'removeFood',
+        payload: food.state(),
+    });
+};
+
+Game.prototype.broadcast = function(message){
+    _.each(this.users, function(user){
+        user.socket.emit(message.tag, message.payload)
+    });
 };
 
 module.exports = Game;
