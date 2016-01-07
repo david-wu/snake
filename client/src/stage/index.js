@@ -13,12 +13,14 @@ function Stage(options){
     setInterval(function(){
         if(that.zoom.in){
             that.zoomIn();
+            that.center();
+            that.transformContainer();
         }
         if(that.zoom.out){
             that.zoomOut();
+            that.center();
+            that.transformContainer();
         }
-        that.center();
-        that.transformContainer();
     }, 16);
 }
 
@@ -26,10 +28,10 @@ Stage.prototype.center = function(bounds){
     var center = this.centerPos();
     var width = this.viewBounds[2] - this.viewBounds[0];
     var height = this.viewBounds[3] - this.viewBounds[1];
-    this.viewBounds[0] = (center.x*20) - (width/2);
-    this.viewBounds[1] = (center.y*20) - (height/2);
-    this.viewBounds[2] = (center.x*20) + (width/2);
-    this.viewBounds[3] = (center.y*20) + (height/2);
+    this.viewBounds[0] = (center.x*40) - (width/2);
+    this.viewBounds[1] = (center.y*40) - (height/2);
+    this.viewBounds[2] = (center.x*40) + (width/2);
+    this.viewBounds[3] = (center.y*40) + (height/2);
 };
 
 Stage.prototype.zoomIn = function(ratio){

@@ -35,7 +35,23 @@ var socket = io.connect(location.origin);
 socket.on('state', function(res){
     foodGroup.updateState(res.foods);
     userGroup.updateState(res.users);
+    stage.center();
+    stage.transformContainer();
 });
+
+var hud = new Hud({
+    renderer: renderer,
+    newSnake: function(callback){
+        return new Promise(function(resolve, rej){
+            socket.emit('command', {
+                type: 'newSnake'
+            }, function(response){
+                resolve(response);
+            });
+        });
+    },
+});
+rootContainer.addChild(hud.container);
 
 
 // This could be simpler

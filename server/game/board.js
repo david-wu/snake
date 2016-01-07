@@ -19,6 +19,7 @@ Board.prototype.addFoods = function(foods){
 Board.prototype.addUsers = function(users){
     var that = this;
     _.each(users, function(user, userIndex){
+        if(!user){return;}
         _.each(user.snake.segments, function(segment){
             var x = segment.pos.x;
             var y = segment.pos.y;

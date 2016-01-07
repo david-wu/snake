@@ -4,8 +4,12 @@
 
 function Food(options){
     this.id = options.id;
-    this.container = new PIXI.Container();
     this.spritePath = './pie.jpg';
+    this.container = new PIXI.Sprite.fromImage(this.spritePath);
+    this.container.anchor.x = 0.5;
+    this.container.anchor.y = 0.5;
+    this.container.width = 50;
+    this.container.height = 50;
 }
 
 Food.prototype.tick = function(){
@@ -13,23 +17,12 @@ Food.prototype.tick = function(){
 }
 
 Food.prototype.draw = function(){
-    if(!this._sprite){
-        this._sprite = new PIXI.Sprite.fromImage(this.spritePath)
-        this._sprite.anchor.x = 0.5;
-        this._sprite.anchor.y = 0.5;
-        this._sprite.width = 50;
-        this._sprite.height = 50;
-        this.container.addChild(this._sprite);
-    }
-
-    this._sprite.position.x = this.pos.x * 50;
-    this._sprite.position.y = this.pos.y * 50;
+    this.container.position.x = this.pos.x * 50;
+    this.container.position.y = this.pos.y * 50;
 }
 
 Food.prototype.delete = function(){
-    if(this._sprite){
-        this.container.removeChild(this._sprite);
-    }
+    this.container.parent.removeChild(this.container)
 }
 
 module.exports = Food;

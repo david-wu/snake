@@ -19,6 +19,7 @@ UserGroup.prototype.addMissing = function(newState){
         if(!that.contents[userId]){
             that.contents[userId] = new User({
                 id: userId,
+                parent: that,
                 name: user.name,
             });
             that.container.addChild(that.contents[userId].container);

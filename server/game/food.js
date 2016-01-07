@@ -3,8 +3,8 @@
 
 var foodId = 0;
 function Food(options){
-    this.pos = options.pos;
     this.id = foodId++;
+    this.pos = options.pos;
     this.type = 'food';
     this.foods = options.foods;
 }
@@ -21,7 +21,7 @@ Food.createRandom = function(options){
     });
 };
 
-Food.prototype.delete = function(){
+Food.prototype.remove = function(){
     for(var i = 0; i < this.foods.length; i++){
         if(this.foods[i] === this){
             this.foods.splice(i, 1);

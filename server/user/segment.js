@@ -10,7 +10,7 @@ Segment.prototype.collideWith = function(things){
     for(var i = 0; i < things.length; things++){
         if(things[i].type === 'food'){
             this.snake.length++;
-            things[i].delete();
+            things[i].remove();
         }
         if(things[i].type === 'segment'){
 
