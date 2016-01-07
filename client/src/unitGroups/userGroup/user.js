@@ -51,7 +51,6 @@ User.prototype.drawName = function(){
         this.container.addChild(this._nameSprite);
         this.sortContainer();
     }
-    // var middle = Math.floor((this.snake.length-1)/2);
     this._nameSprite.position.x = this.snake[0].pos.x * 50;
     this._nameSprite.position.y = (this.snake[0].pos.y * 50)-50;
 };
@@ -61,13 +60,9 @@ User.prototype.delete = function(){
     this.snake.length = 0;
     this.container.children = [];
 
-    this.parent.container.removeChild(this.container);
-    // var containerIndex = this.parent.container.children.indexOf(this.container);
-    // if(containerIndex !== -1){
-    //     this.parent.container.children.splice(containerIndex,1)
-    // }
-
-    console.log(this.parent)
+    if(this.parent){
+        this.parent.container.removeChild(this.container);
+    }
 }
 
 User.prototype.sortContainer = function(){

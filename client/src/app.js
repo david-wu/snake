@@ -38,6 +38,17 @@ socket.on('state', function(res){
     stage.center();
     stage.transformContainer();
 });
+socket.on('myId', function(id){
+    stage.centerPos = function(){
+        var user = userGroup.contents[id];
+        var snakeHead = user && user.snake[0];
+        if(snakeHead){
+            return snakeHead.pos
+        }
+        return {x:0, y:0};
+    };
+});
+
 
 var hud = new Hud({
     renderer: renderer,
