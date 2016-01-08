@@ -2,17 +2,16 @@ var _ = require('lodash');
 var Food = require('./units/food');
 var Powerup = require('./units/powerup.js');
 var Board = require('./board');
-function UnitManager(){
 
+function UnitManager(){
     this.users = [];
+    this.snakes = [];
     this.foods = [];
 
     this.tickCount = 0;
     this.maxFoods = 5000;
     this.foodRange = [[-250, 250],[-250, 250]]
     this.spawnMaxFoodInterval = 10;
-
-
 }
 
 UnitManager.prototype.tick = function(){
@@ -24,14 +23,9 @@ UnitManager.prototype.tick = function(){
         user.tick();
     });
 
-
     this.checkCollisions();
     this.stateCache = this.state();
-
-
-
     this.tickCount++;
-
 }
 
 
