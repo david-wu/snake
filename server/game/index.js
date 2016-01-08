@@ -1,19 +1,20 @@
 var _ = require('lodash');
-var Food = require('./food');
-var Powerup = require('./powerup.js');
-var Board = require('./board');
-
+// var Food = require('./units/food');
+// var Powerup = require('./units/powerup.js');
+// var Board = require('./board');
+var UnitManager = require('./unitManager.js');
 function Game(){
-    this.users = [];
-    this.foods = [];
-    // this.powerups = [];
     this.gameInterval = 50;
+    // this.tickCount = 0;
 
-    this.maxFoods = 5000;
-    this.foodRange = [[-250, 250],[-250, 250]]
-    this.spawnMaxFoodInterval = 10;
+    this.unitManager = new UnitManager();
+    this.users = [];
+    // this.foods = [];
 
-    this.tickCount = 0;
+    // this.maxFoods = 5000;
+    // this.foodRange = [[-250, 250],[-250, 250]]
+    // this.spawnMaxFoodInterval = 10;
+
 }
 
 Game.prototype.start = function(){
@@ -24,16 +25,18 @@ Game.prototype.start = function(){
 Game.prototype.tick = function(){
     var that = this;
 
-    if(this.tickCount % this.spawnMaxFoodInterval === 0){
-        this.spawnMaxFood();
-    }
-    this.tickCount++
+    this.unitManager.tick();
 
-    _.each(this.users, function(user){
-        user.tick();
-    });
-    this.checkCollisions();
-    this.stateCache = this.state();
+    // if(this.tickCount % this.spawnMaxFoodInterval === 0){
+    //     this.spawnMaxFood();
+    // }
+    // this.tickCount++
+
+    // _.each(this.users, function(user){
+    //     user.tick();
+    // });
+    // this.checkCollisions();
+    // this.stateCache = this.state();
 
     _.each(this.users, function(user){
         if(user){
@@ -42,72 +45,74 @@ Game.prototype.tick = function(){
     });
 };
 
-Game.prototype.spawnMaxFood = function(){
-    var missingFoodCount = this.maxFoods - this.foods.length;
-    _.times(missingFoodCount, this.spawnFood.bind(this));
-};
+// Game.prototype.spawnMaxFood = function(){
+//     var missingFoodCount = this.maxFoods - this.foods.length;
+//     _.times(missingFoodCount, this.spawnFood.bind(this));
+// };
 
-Game.prototype.spawnFood = function(){
-    if(this.foods.length >= this.maxFoods){return;}
+// Game.prototype.spawnFood = function(){
+//     if(this.foods.length >= this.maxFoods){return;}
 
-    this.spawnPowerup();
-    this.addFood(Food.createRandom({
-        xRange: this.foodRange[0],
-        yRange: this.foodRange[1],
-    }));
-};
+//     this.spawnPowerup();
+//     this.addFood(Food.createRandom({
+//         xRange: this.foodRange[0],
+//         yRange: this.foodRange[1],
+//     }));
+// };
 
-Game.prototype.spawnPowerup = function(){
-    this.addFood(Powerup.createRandom({
-        xRange: this.foodRange[0],
-        yRange: this.foodRange[1],
-    }))
-};
+// Game.prototype.spawnPowerup = function(){
+//     this.addFood(Powerup.createRandom({
+//         xRange: this.foodRange[0],
+//         yRange: this.foodRange[1],
+//     }))
+// };
 
-Game.prototype.checkCollisions = function(){
-    var board = new Board();
-    board.addFoods(this.foods);
-    board.addUsers(this.users);
-    board.checkCollisions();
-};
+// Game.prototype.checkCollisions = function(){
+//     var board = new Board();
+//     board.addFoods(this.foods);
+//     board.addUsers(this.users);
+//     board.checkCollisions();
+// };
 
 // should populate and cache food and users seperately
-Game.prototype.state = function(){
-    var state = {
-        users: {},
-        foods: {},
-    };
-    _.each(this.users, function(user){
-        state.users[user.id] = user.state();;
-    });
-    _.each(this.foods, function(thing){
-        state.foods[thing.id] = thing.state();
-    });
-    console.log(state)
-    return state;
-};
+// Game.prototype.state = function(){
+//     var state = {
+//         users: {},
+//         foods: {},
+//     };
+//     _.each(this.users, function(user){
+//         state.users[user.id] = user.state();;
+//     });
+//     _.each(this.foods, function(thing){
+//         state.foods[thing.id] = thing.state();
+//     });
+//     return state;
+// };
 
 Game.prototype.updateUsers = function(){
     this.broadcast({
         tag: 'updateUsers',
-        payload: this.stateCache.users,
+        payload: this.unitManager.stateCache.users,
     });
 };
 
 Game.prototype.addUser = function(user){
+    this.unitManager.addUser(user);
     user.remove = this.removeUser.bind(this, user);
     this.users.push(user);
     // should just send food state
-    user.sendState(this.stateCache);
+    user.sendState(this.unitManager.stateCache);
 };
 
 Game.prototype.removeUser = function(user){
     _.pull(this.users, user);
+    this.unitManager.removeUser(user);
 };
 
 Game.prototype.addFood = function(food){
-    food.remove = this.removeFood.bind(this, food);
-    this.foods.push(food);
+    this.unitManager.addFood(food);
+    // food.remove = this.removeFood.bind(this, food);
+    // this.foods.push(food);
     this.broadcast({
         tag: 'addFood',
         payload: food.state(),
@@ -115,7 +120,8 @@ Game.prototype.addFood = function(food){
 };
 
 Game.prototype.removeFood = function(food){
-    _.pull(this.foods, food);
+    // _.pull(this.foods, food);
+    this.unitManager.removeFood(food);
     this.broadcast({
         tag: 'removeFood',
         payload: food.state(),

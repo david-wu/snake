@@ -1,15 +1,15 @@
+var BaseUnit = require('./_baseUnit');
 
 
 
-var powerupId = 0;
 function Powerup(options){
-    this.id = powerupId--;
+    BaseUnit.call(this);
+
     this.type = 'powerup';
     this.pos = options.pos;
 }
 
 Powerup.createRandom = function(options){
-
     var xRange = options.xRange;
     var yRange = options.yRange;
     return new Powerup({
@@ -20,14 +20,8 @@ Powerup.createRandom = function(options){
     });
 };
 
-Powerup.prototype.remove = function(){};
+Powerup.prototype = Object.create(BaseUnit.prototype);
+Powerup.prototype.constructor = BaseUnit;
 
-Powerup.prototype.state = function(){
-    return {
-        id: this.id,
-        pos: this.pos,
-        type: this.type,
-    };
-};
 
 module.exports = Powerup;

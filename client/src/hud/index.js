@@ -13,10 +13,6 @@ function Hud(options){
             name: 'restart',
             click: function(e){
                 that.newSnake()
-                    .then(function(res){
-                        console.log(res);
-                    });
-                    console.log('restart')
             },
         },
         {

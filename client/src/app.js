@@ -49,10 +49,6 @@ var userGroup = new UserGroup({context: stage.container});
 var socket = io.connect(location.origin);
 
 socket.on('state', function(res){
-    // console.log(res.foods)
-        // console.log(_.filter(res.foods, function(d){return d.type === 'powerup'}))
-
-
     foodGroup.updateState(res.foods);
     userGroup.updateState(res.users);
     stage.center();

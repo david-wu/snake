@@ -1,9 +1,10 @@
+var BaseUnit = require('./_baseUnit');
 
 
 
-var foodId = 0;
 function Food(options){
-    this.id = foodId++;
+    BaseUnit.call(this);
+
     this.type = 'food';
     this.pos = options.pos;
 }
@@ -19,14 +20,8 @@ Food.createRandom = function(options){
     });
 };
 
-Food.prototype.remove = function(){};
+Food.prototype = Object.create(BaseUnit.prototype);
+Food.prototype.constructor = BaseUnit;
 
-Food.prototype.state = function(){
-    return {
-        id: this.id,
-        pos: this.pos,
-        type: this.type,
-    };
-};
 
 module.exports = Food;
