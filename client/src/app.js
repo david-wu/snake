@@ -28,6 +28,20 @@ var stage = new Stage({
     },
 });
 
+var hud = new Hud({
+    renderer: renderer,
+    newSnake: function(callback){
+        return new Promise(function(resolve, rej){
+            socket.emit('command', {
+                type: 'newSnake'
+            }, function(response){
+                resolve(response);
+            });
+        });
+    },
+});
+rootContainer.addChild(hud.container);
+
 
 var foodGroup = new FoodGroup({context: stage.container});
 var userGroup = new UserGroup({context: stage.container});
@@ -35,6 +49,10 @@ var userGroup = new UserGroup({context: stage.container});
 var socket = io.connect(location.origin);
 
 socket.on('state', function(res){
+    // console.log(res.foods)
+        // console.log(_.filter(res.foods, function(d){return d.type === 'powerup'}))
+
+
     foodGroup.updateState(res.foods);
     userGroup.updateState(res.users);
     stage.center();
@@ -65,20 +83,6 @@ socket.on('addFood', function(res){
 socket.on('removeFood', function(res){
     foodGroup.remove(res);
 });
-
-var hud = new Hud({
-    renderer: renderer,
-    newSnake: function(callback){
-        return new Promise(function(resolve, rej){
-            socket.emit('command', {
-                type: 'newSnake'
-            }, function(response){
-                resolve(response);
-            });
-        });
-    },
-});
-rootContainer.addChild(hud.container);
 
 
 // This could be simpler

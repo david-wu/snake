@@ -26,11 +26,19 @@ User.prototype.sendId = function(){
 
 User.prototype.commandHandler = function(command, callback){
     if(command.type === 'setVel'){
+        if(this.controlsInverted){
+            command.vel.x = -command.vel.x;
+            command.vel.y = -command.vel.y;
+        }
         this.snake.segments[0].vel = command.vel;
     }else if(command.type === 'newSnake'){
         this.createSnake();
     }
 };
+
+User.prototype.invertControls = function(){
+    this.controlsInverted = !this.controlsInverted;
+}
 
 User.prototype.tick = function(){
     this.snake.tick();

@@ -19,6 +19,10 @@ Segment.prototype.collideWith = function(things){
                 this.snake.user.remove();
             }
         }
+        if(things[i].type === 'powerup'){
+            this.snake.user.invertControls();
+            things[i].remove();
+        }
     }
 };
 

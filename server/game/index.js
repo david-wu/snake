@@ -1,10 +1,12 @@
 var _ = require('lodash');
 var Food = require('./food');
+var Powerup = require('./powerup.js');
 var Board = require('./board');
 
 function Game(){
     this.users = [];
     this.foods = [];
+    // this.powerups = [];
     this.gameInterval = 50;
 
     this.maxFoods = 5000;
@@ -47,10 +49,19 @@ Game.prototype.spawnMaxFood = function(){
 
 Game.prototype.spawnFood = function(){
     if(this.foods.length >= this.maxFoods){return;}
+
+    this.spawnPowerup();
     this.addFood(Food.createRandom({
         xRange: this.foodRange[0],
         yRange: this.foodRange[1],
     }));
+};
+
+Game.prototype.spawnPowerup = function(){
+    this.addFood(Powerup.createRandom({
+        xRange: this.foodRange[0],
+        yRange: this.foodRange[1],
+    }))
 };
 
 Game.prototype.checkCollisions = function(){
@@ -69,9 +80,10 @@ Game.prototype.state = function(){
     _.each(this.users, function(user){
         state.users[user.id] = user.state();;
     });
-    _.each(this.foods, function(food){
-        state.foods[food.id] = food.state();
+    _.each(this.foods, function(thing){
+        state.foods[thing.id] = thing.state();
     });
+    console.log(state)
     return state;
 };
 

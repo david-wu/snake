@@ -4,12 +4,14 @@
 
 function Food(options){
     this.id = options.id;
-    this.spritePath = './pie.jpg';
+    this.type = options.type;
+    this.spritePath = options.type === 'powerup' ? './candy.png' : './pie.jpg';
     this.container = new PIXI.Sprite.fromImage(this.spritePath);
     this.container.anchor.x = 0.5;
     this.container.anchor.y = 0.5;
     this.container.width = 50;
     this.container.height = 50;
+
 }
 
 Food.prototype.tick = function(){
