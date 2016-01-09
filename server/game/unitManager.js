@@ -2,7 +2,6 @@ var _ = require('lodash');
 var Food = require('./units/food');
 var Powerup = require('./units/powerup.js');
 var Board = require('./board');
-
 function UnitManager(){
     this.users = [];
     this.snakes = [];
@@ -48,7 +47,7 @@ UnitManager.prototype.spawnPowerup = function(){
     this.addFood(Powerup.createRandom({
         xRange: this.foodRange[0],
         yRange: this.foodRange[1],
-    }))
+    }));
 };
 
 UnitManager.prototype.checkCollisions = function(){
@@ -58,8 +57,27 @@ UnitManager.prototype.checkCollisions = function(){
     board.checkCollisions();
 };
 
+UnitManager.prototype.addFood = function(food){
+    food.remove = this.removeFood.bind(this, food);
+    this.foods.push(food);
+};
+
+UnitManager.prototype.removeFood = function(food){
+    _.pull(this.foods, food);
+};
+
+UnitManager.prototype.removeUser = function(user){
+    _.pull(this.users, user);
+};
+
+UnitManager.prototype.addUser = function(user){
+    user.remove = this.removeUser.bind(this, user);
+    this.users.push(user);
+};
+
 UnitManager.prototype.state = function(){
     var state = {
+        tick: this.tickCount,
         users: {},
         foods: {},
     };
@@ -71,24 +89,6 @@ UnitManager.prototype.state = function(){
     });
     return state;
 };
-
-UnitManager.prototype.addFood = function(food){
-    food.remove = this.removeFood.bind(this, food);
-    this.foods.push(food);
-}
-UnitManager.prototype.removeFood = function(food){
-    _.pull(this.foods, food);
-};
-
-UnitManager.prototype.removeUser = function(user){
-        _.pull(this.users, user);
-}
-
-UnitManager.prototype.addUser = function(user){
-    user.remove = this.removeUser.bind(this, user);
-    this.users.push(user);
-};
-
 
 
 module.exports = UnitManager;
