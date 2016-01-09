@@ -2,10 +2,16 @@ var _ = require('lodash');
 var Food = require('./units/food');
 var Powerup = require('./units/powerup.js');
 var Board = require('./board');
-function UnitManager(){
+
+function UnitManager(options){
     this.users = [];
     this.snakes = [];
-    this.foods = [];
+    this.immovables = [];
+
+    this.game = options.game;
+
+
+    this.board = new Board();
 
     this.tickCount = 0;
     this.maxFoods = 5000;
@@ -29,41 +35,44 @@ UnitManager.prototype.tick = function(){
 
 
 UnitManager.prototype.spawnMaxFood = function(){
-    var missingFoodCount = this.maxFoods - this.foods.length;
+    var missingFoodCount = this.maxFoods - this.immovables.length;
     _.times(missingFoodCount, this.spawnFood.bind(this));
 };
 
 UnitManager.prototype.spawnFood = function(){
-    if(this.foods.length >= this.maxFoods){return;}
+    if(this.immovables.length >= this.maxFoods){return;}
 
     this.spawnPowerup();
-    this.addFood(Food.createRandom({
+    this.addImmovable(Food.createRandom({
         xRange: this.foodRange[0],
         yRange: this.foodRange[1],
     }));
 };
 
 UnitManager.prototype.spawnPowerup = function(){
-    this.addFood(Powerup.createRandom({
+    this.addImmovable(Powerup.createRandom({
         xRange: this.foodRange[0],
         yRange: this.foodRange[1],
     }));
 };
 
 UnitManager.prototype.checkCollisions = function(){
-    var board = new Board();
-    board.addFoods(this.foods);
-    board.addUsers(this.users);
-    board.checkCollisions();
+    this.board.checkCollisions(this.users);
 };
 
-UnitManager.prototype.addFood = function(food){
-    food.remove = this.removeFood.bind(this, food);
-    this.foods.push(food);
+UnitManager.prototype.addImmovable = function(immovable){
+    immovable.remove = this.removeImmovable.bind(this, immovable);
+    this.board.addUnit(immovable);
+    this.immovables.push(immovable);
 };
 
-UnitManager.prototype.removeFood = function(food){
-    _.pull(this.foods, food);
+UnitManager.prototype.removeImmovable = function(food){
+    this.game.broadcast({
+        tag: 'removeFood',
+        payload: food.state(),
+    });
+    this.board.removeUnit(food);
+    _.pull(this.immovables, food);
 };
 
 UnitManager.prototype.removeUser = function(user){
@@ -84,7 +93,7 @@ UnitManager.prototype.state = function(){
     _.each(this.users, function(user){
         state.users[user.id] = user.state();;
     });
-    _.each(this.foods, function(thing){
+    _.each(this.immovables, function(thing){
         state.foods[thing.id] = thing.state();
     });
     return state;

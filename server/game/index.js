@@ -4,7 +4,9 @@ var UnitManager = require('./unitManager.js');
 
 function Game(){
     this.gameInterval = 50;
-    this.unitManager = new UnitManager();
+    this.unitManager = new UnitManager({
+        game: this,
+    });
     this.users = [];
 }
 
@@ -58,12 +60,12 @@ Game.prototype.addFood = function(food){
     });
 };
 
-Game.prototype.removeFood = function(food){
-    this.unitManager.removeFood(food);
-    this.broadcast({
-        tag: 'removeFood',
-        payload: food.state(),
-    });
-};
+// Game.prototype.removeFood = function(food){
+//     this.unitManager.removeFood(food);
+//     this.broadcast({
+//         tag: 'removeFood',
+//         payload: food.state(),
+//     });
+// };
 
 module.exports = Game;

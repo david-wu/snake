@@ -7,23 +7,25 @@ function Segment(options){
 }
 
 Segment.prototype.collideWith = function(things){
-    for(var i = 0; i < things.length; things++){
-        if(things[i].type === 'food'){
-            this.snake.size++;
-            things[i].remove();
+    var that = this;
+
+    _.eachRight(things, function(thing){
+        if(thing.type === 'food'){
+            that.snake.size++;
+            thing.remove();
         }
-        if(things[i].type === 'segment'){
-            if(things[i].index === 0){
-                things[i].snake.user.remove();
+        if(thing.type === 'segment'){
+            if(thing.index === 0){
+                thing.snake.user.remove();
             }else{
-                this.snake.user.remove();
+                that.snake.user.remove();
             }
         }
-        if(things[i].type === 'powerup'){
-            this.snake.user.invertControls();
-            things[i].remove();
+        if(thing.type === 'powerup'){
+            that.snake.user.invertControls();
+            thing.remove();
         }
-    }
+    });
 };
 
 module.exports = Segment;

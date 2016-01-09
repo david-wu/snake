@@ -4,7 +4,7 @@ var Food = require('./food.js');
 
 function FoodGroup(options){
     this.contents = {};
-    this.container = new PIXI.Container();
+    this.container = new PIXI.ParticleContainer();
     if(options.context){
         options.context.addChild(this.container);
     }
