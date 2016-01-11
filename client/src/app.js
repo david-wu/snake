@@ -48,9 +48,15 @@ var userGroup = new UserGroup({context: stage.container});
 
 var socket = io.connect(location.origin);
 
+
+var allUnits = {};
+socket.on('diffs', function(res){
+    // console.log(res);
+})
+
 socket.on('state', function(res){
-    foodGroup.updateState(res.foods);
-    userGroup.updateState(res.users);
+    foodGroup.updateState(res.food);
+    userGroup.updateState(res.snake);
     stage.center();
     stage.transformContainer();
 });

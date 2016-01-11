@@ -5,7 +5,7 @@
 function BaseGroup(){}
 
 BaseGroup.prototype.updateState = function(newState){
-    this.removeStale(newState);
+    // this.removeStale(newState);
     this.addMissing(newState);
     this.updateExisting(newState);
     this.tick();

@@ -11,7 +11,6 @@ BaseUnit.prototype.state = function(){
     return {
         id: this.id,
         pos: this.pos,
-        type: this.type,
     }
 }
 

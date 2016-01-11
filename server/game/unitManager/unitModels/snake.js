@@ -1,13 +1,22 @@
 var _ = require('lodash');
+var BaseUnit = require('./_baseUnit');
 var Segment = require('./segment.js');
 
-
 function Snake(options){
+    BaseUnit.call(this);
+
+    this.type = 'snake';
+
+    _.extend(this, options);
     this.segments = [];
     this.addSegment();
-    this.size = options.size || 1;
-    this.user = options.user;
+    this.size = this.size || 1;
+    this.user = this.user;
 }
+
+Snake.prototype = Object.create(BaseUnit.prototype);
+Snake.prototype.constructor = BaseUnit;
+
 
 Snake.prototype.addSegment = function(){
     this.segments.push(new Segment({
@@ -19,7 +28,7 @@ Snake.prototype.addSegment = function(){
     }));
 };
 
-Snake.prototype.tick = function(){
+Snake.prototype.tick = function(diffs){
     if(this.size > this.segments.length){
         this.addSegment();
     }
@@ -36,12 +45,12 @@ Snake.prototype.tick = function(){
 
 // State as far as the client is concerned
 Snake.prototype.state = function(){
-    return _.map(this.segments, function(segment){
-        return {
-            pos: segment.pos,
-            vel: segment.vel,
-        };
-    });
+    return {
+        id: this.id,
+        segments: _.map(this.segments, function(segment){
+            return segment.id;
+        }),
+    }
 }
 
 module.exports = Snake;

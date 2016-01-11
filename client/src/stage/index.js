@@ -65,6 +65,9 @@ Stage.prototype.transformContainer = function(){
 };
 
 Stage.prototype.centerPos = function(){
+    if(this.centerUnit){
+        return this.centerUnit.pos;
+    }
     return {x:0, y:0};
 };
 

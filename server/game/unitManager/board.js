@@ -5,14 +5,6 @@ var _ = require('lodash');
 function Board(){
 }
 
-Board.prototype.addImmovable = function(food){
-    var x = food.pos.x;
-    var y = food.pos.y;
-    this[x] = this[x] || {};
-    this[x][y] = this[x][y] || [];
-    this[x][y].push(food);
-};
-
 Board.prototype.addUnit = function(unit){
     var x = unit.pos.x;
     var y = unit.pos.y;
@@ -40,30 +32,26 @@ Board.prototype.removeSnake = function(snake){
     var that = this;
     _.each(snake.segments, function(segment){
         that.removeUnit(segment);
-    })
-}
-
-
-Board.prototype.addUsers = function(users){
-    var that = this;
-    _.each(users, function(user, userIndex){
-        if(!user){return;}
-        that.addSnake(user.snake);
     });
 };
 
-Board.prototype.clearUsers = function(users){
+Board.prototype.addSnakes = function(snakes){
     var that = this;
-    _.each(users, function(user, userIndex){
-        if(!user){return;}
-        that.removeSnake(user.snake);
+    _.each(snakes, function(snake){
+        that.addSnake(snake);
     });
 };
 
-// Pulling logic out of addUsers would slow it down a little
-Board.prototype.checkCollisions = function(users){
-    this.addUsers(users);
-    this.clearUsers(users);
+Board.prototype.clearSnakes = function(snakes){
+    var that = this;
+    _.each(snakes, function(snake){
+        that.removeSnake(snake);
+    });
+};
+
+Board.prototype.checkCollisions = function(snakes){
+    this.addSnakes(snakes);
+    this.clearSnakes(snakes);
 };
 
 module.exports = Board;
