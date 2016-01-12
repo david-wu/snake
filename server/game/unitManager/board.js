@@ -6,6 +6,7 @@ function Board(){
 }
 
 Board.prototype.addUnit = function(unit){
+    if(!unit || !unit.pos){return;}
     var x = unit.pos.x;
     var y = unit.pos.y;
     this[x] = this[x] || {};
@@ -17,35 +18,26 @@ Board.prototype.addUnit = function(unit){
 }
 
 Board.prototype.removeUnit = function(unit){
+    if(!unit || !unit.pos){return;}
     _.pull(this[unit.pos.x][unit.pos.y], unit);
 };
 
 
-Board.prototype.addSnake = function(snake){
-    var that = this;
-    _.each(snake.segments, function(segment){
-        that.addUnit(segment)
-    });
-};
-
-Board.prototype.removeSnake = function(snake){
-    var that = this;
-    _.each(snake.segments, function(segment){
-        that.removeUnit(segment);
-    });
-};
-
 Board.prototype.addSnakes = function(snakes){
     var that = this;
     _.each(snakes, function(snake){
-        that.addSnake(snake);
+        _.each(snake.segments, function(segment){
+            that.addUnit(segment)
+        });
     });
 };
 
 Board.prototype.clearSnakes = function(snakes){
     var that = this;
     _.each(snakes, function(snake){
-        that.removeSnake(snake);
+        _.each(snake.segments, function(segment){
+            that.removeUnit(segment);
+        });
     });
 };
 

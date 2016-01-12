@@ -3,11 +3,12 @@ var PlayerManager = require('./playerManager');
 var UnitManager = require('./unitManager');
 
 function Game(options){
-    this.gameInterval = 50;
     this.playerManager = new PlayerManager();
     this.unitManager = new UnitManager({
         game: this,
     });
+    this.tickCount = 0;
+    this.gameInterval = 50;
 }
 
 Game.prototype.createPlayer = function(options){
@@ -22,9 +23,8 @@ Game.prototype.removePlayer = function(player){
     this.unitManager.removeUnit(player.snake);
 };
 
-// UnitManager produces diffs when it ticks
 Game.prototype.tick = function(){
-    this.unitManager.tick();
+    this.unitManager.tick(this.tickCount++);
     this.playerManager.broadcast({
         tag: 'diffs',
         payload: this.unitManager.diffs,

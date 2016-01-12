@@ -37,3 +37,4 @@ function strapApp(app){
     return app;
 }
 
+module.exports = server;

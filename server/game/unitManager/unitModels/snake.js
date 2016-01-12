@@ -41,15 +41,15 @@ Snake.prototype.tick = function(diffs){
     var head = this.segments[0];
     head.pos.x += head.vel.x;
     head.pos.y += head.vel.y;
+
+    return _.map(this.segments, function())
 };
 
 // State as far as the client is concerned
 Snake.prototype.state = function(){
     return {
         id: this.id,
-        segments: _.map(this.segments, function(segment){
-            return segment.id;
-        }),
+        segments: _.pluck(this.segments, 'id'),
     }
 }
 

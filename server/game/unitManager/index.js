@@ -3,42 +3,49 @@ var UnitModels = require('./unitModels');
 var Board = require('./board');
 
 function UnitManager(options){
-    this.unitGroups = {
-        food: {},
-        powerup: {},
-        snake: {},
-        segment: {}
-    };
-    this.diffs = [];
     this.board = new Board();
-
-    this.tickCount = 0;
-    this.maxFoods = 5000;
-    this.foodRange = [[-250, 250],[-250, 250]]
-    this.spawnMaxFoodInterval = 10;
+    this.unitGroups = {};
+    this.diffs = [];
 }
 
-UnitManager.prototype.tick = function(){
+UnitManager.prototype.tick = function(tickCount){
     var that = this;
-
     this.diffs = [];
-    if(this.tickCount % this.spawnMaxFoodInterval === 0){
+
+    if(tickCount%10 === 0){
         this.spawnMaxFood();
     }
+
     _.each(this.unitGroups.snake, function(snake){
         snake.tick();
+        that.diffs.push(snake.state());
         _.each(snake.segments, function(segment){
             that.diffs.push(segment.state());
         });
-        that.diffs.push(snake.state());
     });
 
     this.board.checkCollisions(this.unitGroups.snakes);
     this.stateCache = this.state();
-    this.tickCount++;
-
 };
 
+UnitManager.prototype.addUnit = function(unit){
+    unit.manager = this;
+
+    this.unitGroups[unit.type] = this.unitGroups[unit.type] || {};
+    this.unitGroups[unit.type][unit.id] = unit;
+    this.board.addUnit(unit);
+    this.diffs.push(unit);
+    return unit;
+};
+
+UnitManager.prototype.removeUnit = function(unit){
+    unit.removed = true;
+
+    delete this.unitGroups[unit.type][unit.id];
+    this.board.removeUnit(unit);
+    this.diffs.push(unit);
+    return unit;
+};
 
 UnitManager.prototype.createUnit = function(modelName, unitOptions, spawnRange){
     var UnitModel = UnitModels[modelName];
@@ -47,42 +54,17 @@ UnitManager.prototype.createUnit = function(modelName, unitOptions, spawnRange){
     return this.addUnit(unit);
 };
 
-UnitManager.prototype.addUnit = function(unit){
-    unit.manager = this;
-    this.unitGroups[unit.type][unit.id] = unit;
-    unit.remove = this.removeUnit.bind(this, unit);
-
-    if(unit.pos){
-        this.board.addUnit(unit);
-    }
-
-    this.diffs.push(unit);
-
-    return unit;
-};
-
-UnitManager.prototype.removeUnit = function(unit){
-    if(unit.pos){
-        this.board.removeUnit(unit);
-    }
-
-    unit.removed = true;
-    this.diffs.push(unit);
-
-    delete this.unitGroups[unit.type][unit.id];
-};
-
 UnitManager.prototype.spawnMaxFood = function(){
-    var that = this;
-    var missingFoodCount = this.maxFoods - Object.keys(this.unitGroups.food).length;
-    _.times(missingFoodCount, function(){
-        that.createUnit('food', {}, that.foodRange);
-    });
+    var missingFoodCount = 5000 - _.size(this.unitGroups.food);
+    var spawnArea = [[-250, 250],[-250, 250]];
+
+    for(var i = 0; i < missingFoodCount; i++){
+        this.createUnit('food', {}, spawnArea);
+    }
 };
 
 UnitManager.prototype.state = function(){
     var state = {};
-
     _.each(this.unitGroups, function(unitGroup, groupName){
         state[groupName] = state[groupName] || {};
         _.each(unitGroup, function(unit){
