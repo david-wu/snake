@@ -1,7 +1,7 @@
 _ = require('lodash');
 var io = require('socket.io-client');
-var FoodGroup = require('./unitGroups/foodGroup');
-var UserGroup = require('./unitGroups/userGroup');
+var FoodGroup = require('./unitManager/foodGroup');
+var UserGroup = require('./unitManager/userGroup');
 var Stage = require('./stage');
 var Hud = require('./hud');
 var KeyListener = require('./keyListener.js')
@@ -10,7 +10,7 @@ var Renderer = require('./renderer');
 
 var rootContainer = new PIXI.Container();
 var renderer = new Renderer();
-var viewBounds = [-1250, -1250, 1250, 1250];
+
 var keyState = {
     vel: {x:0,y:0},
     zoom: {},
@@ -19,66 +19,72 @@ var keyState = {
 var stage = new Stage({
     context: rootContainer,
     renderer: renderer,
-    viewBounds: viewBounds,
     zoom: keyState.zoom,
     centerPos: function(){
-        if(!_.values(userGroup.contents)[0]){return {x:0, y:0};}
-        var snake = _.values(userGroup.contents)[0].snake;
-        return snake[0].pos;
+        return {x:0, y:0};
     },
 });
 
 var hud = new Hud({
     renderer: renderer,
     newSnake: function(callback){
-        return new Promise(function(resolve, rej){
-            socket.emit('command', {
-                type: 'newSnake'
-            }, function(response){
-                resolve(response);
-            });
-        });
+        console.log('new snake!');
+        // return new Promise(function(resolve, rej){
+        //     socket.emit('command', {
+        //         type: 'newSnake'
+        //     }, function(response){
+        //         resolve(response);
+        //     });
+        // });
     },
 });
 rootContainer.addChild(hud.container);
 
+var UnitGroups = require('./unitGroups')
+var unitGroups = new UnitGroups();
+stage.container.addChild(unitGroups.container);
 
-var foodGroup = new FoodGroup({context: stage.container});
-var userGroup = new UserGroup({context: stage.container});
 
 var socket = io.connect(location.origin);
 
+socket.on('diffs', function(diffs){
+    _.each(diffs, function(diff){
+        unitGroups.processDiff(diff);
+    });
+});
+
 socket.on('state', function(res){
-    foodGroup.updateState(res.foods);
-    userGroup.updateState(res.users);
-    stage.center();
-    stage.transformContainer();
+    console.log('state!', res)
+//     foodGroup.updateState(res.food);
+//     userGroup.updateState(res.snake);
+//     stage.center();
+//     stage.transformContainer();
 });
 
-socket.on('myId', function(id){
-    stage.centerPos = function(){
-        var user = userGroup.contents[id];
-        var snakeHead = user && user.snake && user.snake[0];
-        if(snakeHead){
-            return snakeHead.pos
-        }
-        return {x:0, y:0};
-    };
-});
+// socket.on('myId', function(id){
+//     stage.centerPos = function(){
+//         var user = userGroup.contents[id];
+//         var snakeHead = user && user.snake && user.snake[0];
+//         if(snakeHead){
+//             return snakeHead.pos
+//         }
+//         return {x:0, y:0};
+//     };
+// });
 
-socket.on('updateUsers', function(res){
-    userGroup.updateState(res)
-    stage.center();
-    stage.transformContainer();
-});
+// socket.on('updateUsers', function(res){
+//     userGroup.updateState(res)
+//     stage.center();
+//     stage.transformContainer();
+// });
 
-socket.on('addFood', function(res){
-    foodGroup.add(foodGroup.createItem(res));
-});
+// socket.on('addFood', function(res){
+//     foodGroup.add(foodGroup.createItem(res));
+// });
 
-socket.on('removeFood', function(res){
-    foodGroup.remove(res);
-});
+// socket.on('removeFood', function(res){
+//     foodGroup.remove(res);
+// });
 
 
 // This could be simpler

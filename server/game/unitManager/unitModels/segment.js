@@ -1,10 +1,17 @@
 var _ = require('lodash');
-
+var BaseUnit = require('./_baseUnit');
 
 
 function Segment(options){
-    _.extend(this, options);
+    BaseUnit.call(this);
+    _.extend(this, options)
+    this.type = 'segment';
 }
+
+
+Segment.prototype = Object.create(BaseUnit.prototype);
+Segment.prototype.constructor = BaseUnit;
+
 
 Segment.prototype.collideWith = function(things){
     var that = this;

@@ -2,7 +2,6 @@ var http = require('http');
 var express = require('express');
 var Io = require('socket.io');
 var Game = require('./game');
-var User = require('./user');
 
 
 var game = new Game().start();
@@ -16,14 +15,13 @@ server.on('request', app);
 
 Io(server)
     .on('connection', function(socket){
-        var user = new User({
-            socket: socket,
+
+        var player = game.createPlayer({
+            socket: socket
         });
 
-        game.addUser(user);
-
         socket.on('disconnect', function(){
-            game.removeUser(user);
+            game.removePlayer(player);
         });
     });
 
@@ -39,3 +37,4 @@ function strapApp(app){
     return app;
 }
 
+module.exports = server;

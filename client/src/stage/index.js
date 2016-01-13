@@ -3,6 +3,7 @@
 function Stage(options){
     _.extend(this, options);
     this.container = new PIXI.Container();
+    this.viewBounds = options.viewBounds || [-1250, -1250, 1250, 1250];
 
     if(this.context){
         this.context.addChild(this.container);
@@ -65,6 +66,9 @@ Stage.prototype.transformContainer = function(){
 };
 
 Stage.prototype.centerPos = function(){
+    if(this.centerUnit){
+        return this.centerUnit.pos;
+    }
     return {x:0, y:0};
 };
 

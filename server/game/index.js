@@ -1,22 +1,33 @@
 var _ = require('lodash');
-var UnitManager = require('./unitManager.js');
+var PlayerManager = require('./playerManager');
+var UnitManager = require('./unitManager');
 
-
-function Game(){
-    this.gameInterval = 50;
+function Game(options){
+    this.playerManager = new PlayerManager();
     this.unitManager = new UnitManager({
         game: this,
     });
-    this.users = [];
+    this.tickCount = 0;
+    this.gameInterval = 50;
 }
 
+Game.prototype.createPlayer = function(options){
+    var player = this.playerManager.createPlayer(options);
+    player.snake = this.unitManager.createUnit('snake', {});
+    player.socket.emit('state', this.unitManager.stateCache);
+    return player;
+};
+
+Game.prototype.removePlayer = function(player){
+    this.playerManager.removePlayer(player);
+    this.unitManager.removeUnit(player.snake);
+};
+
 Game.prototype.tick = function(){
-    var that = this;
-    this.unitManager.tick();
-    _.each(this.users, function(user){
-        if(user){
-            that.updateUsers();
-        }
+    this.unitManager.tick(this.tickCount++);
+    this.playerManager.broadcast({
+        tag: 'diffs',
+        payload: this.unitManager.diffs,
     });
 };
 
@@ -24,48 +35,5 @@ Game.prototype.start = function(){
     setInterval(this.tick.bind(this), this.gameInterval);
     return this;
 };
-
-Game.prototype.broadcast = function(message){
-    _.each(this.users, function(user){
-        user.socket.emit(message.tag, message.payload);
-    });
-};
-
-Game.prototype.updateUsers = function(){
-    this.broadcast({
-        tag: 'updateUsers',
-        payload: this.unitManager.stateCache.users,
-    });
-};
-
-// Need to split up user and snake
-Game.prototype.addUser = function(user){
-    this.unitManager.addUser(user);
-    user.remove = this.removeUser.bind(this, user);
-    this.users.push(user);
-    // should just send food state
-    user.sendState(this.unitManager.stateCache);
-};
-
-Game.prototype.removeUser = function(user){
-    _.pull(this.users, user);
-    this.unitManager.removeUser(user);
-};
-
-Game.prototype.addFood = function(food){
-    this.unitManager.addFood(food);
-    this.broadcast({
-        tag: 'addFood',
-        payload: food.state(),
-    });
-};
-
-// Game.prototype.removeFood = function(food){
-//     this.unitManager.removeFood(food);
-//     this.broadcast({
-//         tag: 'removeFood',
-//         payload: food.state(),
-//     });
-// };
 
 module.exports = Game;
