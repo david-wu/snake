@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var BaseGroup = require('../_baseGroup.js');
-var Food = require('./food.js');
+var Food = require('../units/food.js');
 
 function FoodGroup(options){
     this.contents = {};

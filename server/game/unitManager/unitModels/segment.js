@@ -4,7 +4,6 @@ var BaseUnit = require('./_baseUnit');
 
 function Segment(options){
     BaseUnit.call(this);
-
     _.extend(this, options)
     this.type = 'segment';
 }

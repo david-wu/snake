@@ -1,13 +1,13 @@
 var _ = require('lodash');
 var BaseGroup = require('../_baseGroup.js');
-var User = require('./user.js');
+var User = require('../units/user.js');
 
 function UserGroup(options){
     this.contents = {};
     this.container = new PIXI.Container();
     this.itemConstructor = User;
     if(options.context){
-        options.context.addChild(this.container)
+        options.context.addChild(this.container);
     }
 }
 

@@ -4,7 +4,6 @@ var BaseUnit = require('./_baseUnit');
 
 function Food(options){
     BaseUnit.call(this);
-
     this.type = 'food';
     this.pos = options.pos;
 }
