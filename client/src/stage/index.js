@@ -5,23 +5,16 @@ function Stage(options){
     this.container = new PIXI.Container();
     this.viewBounds = options.viewBounds || [-1250, -1250, 1250, 1250];
 
-    if(this.context){
-        this.context.addChild(this.container);
-    }
-
-
     var that = this;
     setInterval(function(){
         if(that.zoom.in){
             that.zoomIn();
-            that.center();
-            that.transformContainer();
         }
         if(that.zoom.out){
             that.zoomOut();
-            that.center();
-            that.transformContainer();
         }
+        that.center();
+        that.transformContainer();
     }, 16);
 }
 

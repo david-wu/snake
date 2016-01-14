@@ -14,7 +14,8 @@ function Game(options){
 Game.prototype.createPlayer = function(options){
     var player = this.playerManager.createPlayer(options);
     player.snake = this.unitManager.createUnit('snake', {});
-    player.socket.emit('state', this.unitManager.stateCache);
+    player.socket.emit('diffs', this.unitManager.stateDiffsCache);
+    player.socket.emit('myCenterUnit', player.snake.segments[0].state());
     return player;
 };
 

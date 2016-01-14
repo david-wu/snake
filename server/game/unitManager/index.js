@@ -25,7 +25,7 @@ UnitManager.prototype.tick = function(tickCount){
     });
 
     this.board.checkCollisions(this.unitGroups.snakes);
-    this.stateCache = this.state();
+    this.stateDiffsCache = this.stateDiffs();
 };
 
 UnitManager.prototype.addUnit = function(unit){
@@ -63,17 +63,15 @@ UnitManager.prototype.spawnMaxFood = function(){
     }
 };
 
-UnitManager.prototype.state = function(){
-    var state = {};
+UnitManager.prototype.stateDiffs = function(){
+    var diffs = [];
     _.each(this.unitGroups, function(unitGroup, groupName){
-        state[groupName] = state[groupName] || {};
         _.each(unitGroup, function(unit){
-            state[groupName][unit.id] = unit.state();
+            diffs.push(unit.state());
         });
     });
-    return state;
+    return diffs;
 };
-
 
 function randomPos(range){
     var xRange = range[0] || [-50, 50];

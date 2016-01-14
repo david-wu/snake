@@ -18,9 +18,9 @@ function UnitGroup(options){
 }
 
 UnitGroup.prototype.add = function(unit){
-    this.unitsById[unit.id] = unit;
     this.units.push(unit);
     this.container.addChild(unit.container);
+    return this.unitsById[unit.id] = unit;
 };
 
 UnitGroup.prototype.remove = function(unit){
@@ -31,7 +31,7 @@ UnitGroup.prototype.remove = function(unit){
 
 UnitGroup.prototype.create = function(options){
     options.parent = this;
-    this.add(new this.Constructor(options));
+    return this.add(new this.Constructor(options));
 }
 
 UnitGroup.prototype.draw = function(){
@@ -43,14 +43,16 @@ UnitGroup.prototype.draw = function(){
 UnitGroup.prototype.processDiff = function(diff){
     var unit = this.unitsById[diff.id];
 
-    // Should have a switch 'command' for create, remove, mod
+    // Should have a 'command' switch for create, remove, modify
     if(!unit){
-        this.create(diff);
+        var unit = this.create(diff);
+        unit.pos = diff.pos;
     }else if(diff.remove){
         this.remove(this.unitsById[diff.id]);
     }else{
         unit.pos = diff.pos;
     }
+    return unit;
 };
 
 module.exports = UnitGroup;

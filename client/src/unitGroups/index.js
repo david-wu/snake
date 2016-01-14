@@ -30,8 +30,7 @@ UnitGroups.prototype.draw = function(){
 };
 
 UnitGroups.prototype.processDiff = function(diff){
-    if(!this.groupsByName[diff.type]){debugger;}
-    this.groupsByName[diff.type].processDiff(diff);
+    return this.groupsByName[diff.type].processDiff(diff);
 };
 
 UnitGroups.prototype.initModelGroups = function(){
