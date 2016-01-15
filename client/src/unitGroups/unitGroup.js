@@ -50,7 +50,7 @@ UnitGroup.prototype.processDiff = function(diff){
     }else if(diff.action === 'remove'){
         this.remove(this.unitsById[diff.id]);
     }else{
-        unit.pos = diff.pos;
+        _.extend(unit, diff)
     }
     return unit;
 };

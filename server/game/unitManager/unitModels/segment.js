@@ -17,9 +17,12 @@ Segment.prototype.collideWith = function(things){
     var that = this;
 
     _.eachRight(things, function(thing){
-        if(thing.type === 'food'){
-            that.snake.size++;
-            thing.remove();
+        if(thing.type === 'segment'){
+            if(that.snake){
+                that.snake.segments.push(thing)
+            }
+            // that.snake.size++;
+            // thing.remove();
         }
         // if(thing.type === 'segment'){
         //     if(thing.index === 0){
@@ -34,5 +37,16 @@ Segment.prototype.collideWith = function(things){
         // }
     });
 };
+
+
+Segment.prototype.state = function(){
+    return {
+        type: this.type,
+        id: this.id,
+        pos: this.pos,
+        flavor: this.flavor,
+    };
+};
+
 
 module.exports = Segment;

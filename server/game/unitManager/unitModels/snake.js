@@ -22,6 +22,7 @@ Snake.prototype.addSegment = function(){
     this.segments.push(new Segment({
         type: 'segment',
         snake: this,
+        flavor: 0,
         pos: {x:0, y:0},
         vel: {x:0, y:0},
         index: this.segments.length,

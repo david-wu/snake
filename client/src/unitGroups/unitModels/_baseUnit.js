@@ -19,14 +19,12 @@ BaseUnit.prototype.remove = function(sprite){
     this.container.removeChild(sprite.container);
 };
 
-BaseUnit.prototype.draw = function(){};
-
 BaseUnit.prototype.destroy = function(){
     this.parent.remove(this);
 };
 
 BaseUnit.prototype.defaultSprite = function(){
-    var sprite = new PIXI.Sprite.fromImage('./pie.jpg');
+    var sprite = new PIXI.Sprite.fromImage(this.spritePath || './pie.jpg');
     sprite.anchor.x = 0.5;
     sprite.anchor.y = 0.5;
     sprite.width = 50;
@@ -42,32 +40,4 @@ BaseUnit.prototype.draw = function(){
 
 
 module.exports = BaseUnit;
-
-
-
-
-// var that = this;
-// var pos = this.pos || this.parent.pos;
-// var posCoord = pos.coords;
-// this.stage = stage;
-
-// if(!this.sprite){
-//     if(!this.spritePath){return;}
-//     this.sprite = new PIXI.Sprite.fromImage(this.spritePath);
-
-//     this.sprite.anchor.x = 0.5;
-//     this.sprite.anchor.y = 0.5;
-//     this.sprite.tint = this.tint || 0xFFFFFF;
-//     stage.addChild(this.sprite);
-// }
-
-// if(this.selected){
-//     this.sprite.tint = 0x00FF00
-// }else{
-//     this.sprite.tint = this.tint;
-// }
-// this.sprite.position.x = posCoord[0];
-// this.sprite.position.y = posCoord[1];
-// this.sprite.width = this.radius*2;
-// this.sprite.height = this.radius*2;
 

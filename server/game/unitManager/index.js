@@ -57,11 +57,13 @@ UnitManager.prototype.createUnit = function(modelName, unitOptions, spawnRange){
 };
 
 UnitManager.prototype.spawnMaxFood = function(){
-    var missingFoodCount = 5000 - _.size(this.unitGroups.food);
+    var missingSegmentCount = 5000 - _.size(this.unitGroups.segment);
     var spawnArea = [[-250, 250],[-250, 250]];
 
-    for(var i = 0; i < missingFoodCount; i++){
-        this.createUnit('food', {}, spawnArea);
+    for(var i = 0; i < missingSegmentCount; i++){
+        this.createUnit('segment', {
+            flavor: i%5
+        }, spawnArea);
     }
 };
 

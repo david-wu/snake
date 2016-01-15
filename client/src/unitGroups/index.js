@@ -1,5 +1,5 @@
 var UnitModels = require('./unitModels');
-var UnitGroup = require('./services/unitGroup.js');
+var UnitGroup = require('./unitGroup.js');
 
 
 function UnitGroups(){

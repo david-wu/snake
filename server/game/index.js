@@ -20,7 +20,12 @@ Game.prototype.createPlayer = function(options){
 };
 
 Game.prototype.removePlayer = function(player){
+    var that = this;
     this.playerManager.removePlayer(player);
+    _.each(player.snake.segments, function(segment){
+        segment.snake = undefined;
+        that.unitManager.board.addUnit(segment);
+    });
     this.unitManager.removeUnit(player.snake);
 };
 
