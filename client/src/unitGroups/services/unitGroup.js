@@ -24,7 +24,7 @@ UnitGroup.prototype.add = function(unit){
 };
 
 UnitGroup.prototype.remove = function(unit){
-    delete this.unitsById(unit);
+    delete this.unitsById[unit];
     _.pull(this.units, unit);
     this.container.removeChild(unit.container);
 };
@@ -47,7 +47,7 @@ UnitGroup.prototype.processDiff = function(diff){
     if(!unit){
         var unit = this.create(diff);
         unit.pos = diff.pos;
-    }else if(diff.remove){
+    }else if(diff.action === 'remove'){
         this.remove(this.unitsById[diff.id]);
     }else{
         unit.pos = diff.pos;
