@@ -21,17 +21,17 @@ Segment.prototype.collideWith = function(things){
             that.snake.size++;
             thing.remove();
         }
-        if(thing.type === 'segment'){
-            if(thing.index === 0){
-                thing.snake.user.remove();
-            }else{
-                that.snake.user.remove();
-            }
-        }
-        if(thing.type === 'powerup'){
-            that.snake.user.invertControls();
-            thing.remove();
-        }
+        // if(thing.type === 'segment'){
+        //     if(thing.index === 0){
+        //         thing.snake.remove();
+        //     }else{
+        //         that.snake.remove();
+        //     }
+        // }
+        // if(thing.type === 'powerup'){
+        //     that.snake.user.invertControls();
+        //     thing.remove();
+        // }
     });
 };
 

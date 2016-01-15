@@ -24,7 +24,7 @@ UnitManager.prototype.tick = function(tickCount){
         });
     });
 
-    this.board.checkCollisions(this.unitGroups.snakes);
+    this.board.checkCollisions(this.unitGroups.snake);
     this.stateDiffsCache = this.stateDiffs();
 };
 
@@ -34,16 +34,18 @@ UnitManager.prototype.addUnit = function(unit){
     this.unitGroups[unit.type] = this.unitGroups[unit.type] || {};
     this.unitGroups[unit.type][unit.id] = unit;
     this.board.addUnit(unit);
-    this.diffs.push(unit);
+    this.diffs.push(unit.state());
     return unit;
 };
 
 UnitManager.prototype.removeUnit = function(unit){
     unit.removed = true;
-
     delete this.unitGroups[unit.type][unit.id];
     this.board.removeUnit(unit);
-    this.diffs.push(unit);
+
+    var diff = unit.state();
+    diff.action = 'remove';
+    this.diffs.push(diff);
     return unit;
 };
 

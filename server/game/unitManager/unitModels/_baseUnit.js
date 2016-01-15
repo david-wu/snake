@@ -21,5 +21,9 @@ BaseUnit.prototype.remove = function(){
 };
 
 
+BaseUnit.prototype.collideWith = function(){
+
+}
+
 module.exports = BaseUnit;
 
