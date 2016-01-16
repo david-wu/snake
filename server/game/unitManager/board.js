@@ -2,8 +2,7 @@ var _ = require('lodash');
 
 
 
-function Board(){
-}
+function Board(){}
 
 Board.prototype.addUnit = function(unit){
     if(!unit || !unit.pos){return;}
@@ -27,7 +26,7 @@ Board.prototype.addSnakes = function(snakes){
     var that = this;
     _.each(snakes, function(snake){
         _.each(snake.segments, function(segment){
-            that.addUnit(segment)
+            that.addUnit(segment);
         });
     });
 };

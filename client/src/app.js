@@ -1,11 +1,9 @@
 _ = require('lodash');
 var io = require('socket.io-client');
-var FoodGroup = require('./unitManager/foodGroup');
-var UserGroup = require('./unitManager/userGroup');
+var Renderer = require('./renderer');
 var Stage = require('./stage');
 var Hud = require('./hud');
 var KeyListener = require('./keyListener.js')
-var Renderer = require('./renderer');
 
 
 var rootContainer = new PIXI.Container();
@@ -20,23 +18,11 @@ var stage = new Stage({
     context: rootContainer,
     renderer: renderer,
     zoom: keyState.zoom,
-    centerPos: function(){
-        return {x:0, y:0};
-    },
 });
+rootContainer.addChild(stage.container);
 
 var hud = new Hud({
     renderer: renderer,
-    newSnake: function(callback){
-        console.log('new snake!');
-        // return new Promise(function(resolve, rej){
-        //     socket.emit('command', {
-        //         type: 'newSnake'
-        //     }, function(response){
-        //         resolve(response);
-        //     });
-        // });
-    },
 });
 rootContainer.addChild(hud.container);
 
@@ -53,38 +39,11 @@ socket.on('diffs', function(diffs){
     });
 });
 
-socket.on('state', function(res){
-    console.log('state!', res)
-//     foodGroup.updateState(res.food);
-//     userGroup.updateState(res.snake);
-//     stage.center();
-//     stage.transformContainer();
+socket.on('myCenterUnit', function(diff){
+    var unit = unitGroups.processDiff(diff)
+    stage.centerUnit = unit;
 });
 
-// socket.on('myId', function(id){
-//     stage.centerPos = function(){
-//         var user = userGroup.contents[id];
-//         var snakeHead = user && user.snake && user.snake[0];
-//         if(snakeHead){
-//             return snakeHead.pos
-//         }
-//         return {x:0, y:0};
-//     };
-// });
-
-// socket.on('updateUsers', function(res){
-//     userGroup.updateState(res)
-//     stage.center();
-//     stage.transformContainer();
-// });
-
-// socket.on('addFood', function(res){
-//     foodGroup.add(foodGroup.createItem(res));
-// });
-
-// socket.on('removeFood', function(res){
-//     foodGroup.remove(res);
-// });
 
 
 // This could be simpler

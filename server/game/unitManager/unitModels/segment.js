@@ -4,8 +4,8 @@ var BaseUnit = require('./_baseUnit');
 
 function Segment(options){
     BaseUnit.call(this);
-    _.extend(this, options)
     this.type = 'segment';
+    _.extend(this, options);
 }
 
 
@@ -17,22 +17,36 @@ Segment.prototype.collideWith = function(things){
     var that = this;
 
     _.eachRight(things, function(thing){
-        if(thing.type === 'food'){
-            that.snake.size++;
-            thing.remove();
-        }
         if(thing.type === 'segment'){
-            if(thing.index === 0){
-                thing.snake.user.remove();
-            }else{
-                that.snake.user.remove();
+            if(that.snake){
+                that.snake.segments.push(thing)
             }
+            // that.snake.size++;
+            // thing.remove();
         }
-        if(thing.type === 'powerup'){
-            that.snake.user.invertControls();
-            thing.remove();
-        }
+        // if(thing.type === 'segment'){
+        //     if(thing.index === 0){
+        //         thing.snake.remove();
+        //     }else{
+        //         that.snake.remove();
+        //     }
+        // }
+        // if(thing.type === 'powerup'){
+        //     that.snake.user.invertControls();
+        //     thing.remove();
+        // }
     });
 };
+
+
+Segment.prototype.state = function(){
+    return {
+        type: this.type,
+        id: this.id,
+        pos: this.pos,
+        flavor: this.flavor,
+    };
+};
+
 
 module.exports = Segment;

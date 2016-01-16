@@ -24,8 +24,8 @@ UnitManager.prototype.tick = function(tickCount){
         });
     });
 
-    this.board.checkCollisions(this.unitGroups.snakes);
-    this.stateCache = this.state();
+    this.board.checkCollisions(this.unitGroups.snake);
+    this.stateDiffsCache = this.stateDiffs();
 };
 
 UnitManager.prototype.addUnit = function(unit){
@@ -34,16 +34,18 @@ UnitManager.prototype.addUnit = function(unit){
     this.unitGroups[unit.type] = this.unitGroups[unit.type] || {};
     this.unitGroups[unit.type][unit.id] = unit;
     this.board.addUnit(unit);
-    this.diffs.push(unit);
+    this.diffs.push(unit.state());
     return unit;
 };
 
 UnitManager.prototype.removeUnit = function(unit){
     unit.removed = true;
-
     delete this.unitGroups[unit.type][unit.id];
     this.board.removeUnit(unit);
-    this.diffs.push(unit);
+
+    var diff = unit.state();
+    diff.action = 'remove';
+    this.diffs.push(diff);
     return unit;
 };
 
@@ -55,25 +57,25 @@ UnitManager.prototype.createUnit = function(modelName, unitOptions, spawnRange){
 };
 
 UnitManager.prototype.spawnMaxFood = function(){
-    var missingFoodCount = 5000 - _.size(this.unitGroups.food);
+    var missingSegmentCount = 5000 - _.size(this.unitGroups.segment);
     var spawnArea = [[-250, 250],[-250, 250]];
 
-    for(var i = 0; i < missingFoodCount; i++){
-        this.createUnit('food', {}, spawnArea);
+    for(var i = 0; i < missingSegmentCount; i++){
+        this.createUnit('segment', {
+            flavor: i%5
+        }, spawnArea);
     }
 };
 
-UnitManager.prototype.state = function(){
-    var state = {};
+UnitManager.prototype.stateDiffs = function(){
+    var diffs = [];
     _.each(this.unitGroups, function(unitGroup, groupName){
-        state[groupName] = state[groupName] || {};
         _.each(unitGroup, function(unit){
-            state[groupName][unit.id] = unit.state();
+            diffs.push(unit.state());
         });
     });
-    return state;
+    return diffs;
 };
-
 
 function randomPos(range){
     var xRange = range[0] || [-50, 50];

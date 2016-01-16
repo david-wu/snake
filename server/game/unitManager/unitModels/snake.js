@@ -22,6 +22,7 @@ Snake.prototype.addSegment = function(){
     this.segments.push(new Segment({
         type: 'segment',
         snake: this,
+        flavor: 0,
         pos: {x:0, y:0},
         vel: {x:0, y:0},
         index: this.segments.length,
@@ -41,10 +42,6 @@ Snake.prototype.tick = function(diffs){
     var head = this.segments[0];
     head.pos.x += head.vel.x;
     head.pos.y += head.vel.y;
-
-    return _.map(this.segments, function(){
-
-    })
 };
 
 // State as far as the client is concerned

@@ -5,34 +5,32 @@ function Stage(options){
     this.container = new PIXI.Container();
     this.viewBounds = options.viewBounds || [-1250, -1250, 1250, 1250];
 
-    if(this.context){
-        this.context.addChild(this.container);
-    }
-
-
     var that = this;
     setInterval(function(){
         if(that.zoom.in){
             that.zoomIn();
-            that.center();
-            that.transformContainer();
         }
         if(that.zoom.out){
             that.zoomOut();
-            that.center();
-            that.transformContainer();
         }
+        that.center();
+        that.transformContainer();
     }, 16);
 }
 
+// Moves viewBounds towards centerPos()
 Stage.prototype.center = function(bounds){
     var center = this.centerPos();
     var width = this.viewBounds[2] - this.viewBounds[0];
     var height = this.viewBounds[3] - this.viewBounds[1];
-    this.viewBounds[0] = (center.x*50) - (width/2);
-    this.viewBounds[1] = (center.y*50) - (height/2);
-    this.viewBounds[2] = (center.x*50) + (width/2);
-    this.viewBounds[3] = (center.y*50) + (height/2);
+
+    var deltaX = (this.viewBounds[0] + (width/2)) - (center.x*50)
+    var deltaY = (this.viewBounds[1] + (height/2)) - (center.y*50)
+
+    this.viewBounds[0] -= deltaX/20
+    this.viewBounds[1] -= deltaY/20
+    this.viewBounds[2] -= deltaX/20
+    this.viewBounds[3] -= deltaY/20
 };
 
 Stage.prototype.zoomIn = function(ratio){
@@ -66,10 +64,7 @@ Stage.prototype.transformContainer = function(){
 };
 
 Stage.prototype.centerPos = function(){
-    if(this.centerUnit){
-        return this.centerUnit.pos;
-    }
-    return {x:0, y:0};
+    return this.centerUnit ? this.centerUnit.pos : {x:0, y:0};
 };
 
 Stage.prototype.render = function(){
