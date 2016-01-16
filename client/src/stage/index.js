@@ -9,38 +9,28 @@ function Stage(options){
     setInterval(function(){
         if(that.zoom.in){
             that.zoomIn();
-            // that.center();
-            // that.transformContainer();
         }
         if(that.zoom.out){
             that.zoomOut();
         }
-            that.center();
-            that.transformContainer();
-
+        that.center();
+        that.transformContainer();
     }, 16);
 }
 
+// Moves viewBounds towards centerPos()
 Stage.prototype.center = function(bounds){
     var center = this.centerPos();
     var width = this.viewBounds[2] - this.viewBounds[0];
     var height = this.viewBounds[3] - this.viewBounds[1];
-    // this.viewBounds[0] = (center.x*50) - (width/2);
-    // this.viewBounds[1] = (center.y*50) - (height/2);
-    // this.viewBounds[2] = (center.x*50) + (width/2);
-    // this.viewBounds[3] = (center.y*50) + (height/2);
 
-    var deltaX = (this.viewBounds[0] + (this.viewBounds[2] - this.viewBounds[0])/2) - (center.x*50)
-    var deltaY = (this.viewBounds[1] + (this.viewBounds[3] - this.viewBounds[1])/2) - (center.y*50)
+    var deltaX = (this.viewBounds[0] + (width/2)) - (center.x*50)
+    var deltaY = (this.viewBounds[1] + (height/2)) - (center.y*50)
 
-    this.viewBounds[0] -= deltaX/60
-    this.viewBounds[1] -= deltaY/60
-    this.viewBounds[2] -= deltaX/60
-    this.viewBounds[3] -= deltaY/60
-
-    // this.viewBounds[2] = (center.x*50) + (width/2);
-    // this.viewBounds[3] = (center.y*50) + (height/2);
-
+    this.viewBounds[0] -= deltaX/20
+    this.viewBounds[1] -= deltaY/20
+    this.viewBounds[2] -= deltaX/20
+    this.viewBounds[3] -= deltaY/20
 };
 
 Stage.prototype.zoomIn = function(ratio){
@@ -73,20 +63,8 @@ Stage.prototype.transformContainer = function(){
     this.container.position.y = -this.viewBounds[1] * yScale;
 };
 
-Stage.prototype.tween = function(currentTime, x0, v, totalTime){
-
-}
-
 Stage.prototype.centerPos = function(){
-    if(this.centerUnit){
-        // var currentCenter = [this.viewBounds[2]-this.viewBounds[0], this.viewBounds[3]-this.viewBounds[1]];
-
-        // var totalXDiff = this.centerUnit.pos.x - currentCenter[0];
-        // var totalYDiff = this.centerUnit.pos.y - currentCenter[1];
-
-        return this.centerUnit.pos;
-    }
-    return {x:0, y:0};
+    return this.centerUnit ? this.centerUnit.pos : {x:0, y:0};
 };
 
 Stage.prototype.render = function(){

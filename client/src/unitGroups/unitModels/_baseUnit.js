@@ -34,8 +34,15 @@ BaseUnit.prototype.defaultSprite = function(){
 
 BaseUnit.prototype.draw = function(){
     if(!this.pos){return;}
-    this.container.position.x = this.pos.x*50;
-    this.container.position.y = this.pos.y*50;
+    // this.container.position.x = this.pos.x*50;
+    // this.container.position.y = this.pos.y*50;
+
+    this.container.position.x = this.container.position.x || this.pos.x*50;
+    this.container.position.y = this.container.position.y || this.pos.y*50;
+    var deltaX = (this.pos.x*50) - this.container.position.x;
+    var deltaY = (this.pos.y*50) - this.container.position.y;
+    this.container.position.x += deltaX/5;
+    this.container.position.y += deltaY/5;
 };
 
 

@@ -15,6 +15,7 @@ function UnitGroup(options){
     setInterval(function(){
         this.draw()
     }.bind(this), 16)
+
 }
 
 UnitGroup.prototype.add = function(unit){

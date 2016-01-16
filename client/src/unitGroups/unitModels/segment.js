@@ -6,7 +6,6 @@ function Segment(options){
     BaseUnit.call(this);
     this.id = options.id;
     this.flavor = options.flavor;
-// console.log(this.flavor)
     this.spritePath = this.getSpritePath(options.flavor);
     this.container = this.defaultSprite();
 }
@@ -14,6 +13,7 @@ function Segment(options){
 Segment.configs = {
     name: 'segment',
     Constructor: Segment,
+    // particle: true,
 };
 
 Segment.prototype = Object.create(BaseUnit.prototype);
@@ -22,15 +22,15 @@ Segment.prototype.constructor = BaseUnit;
 Segment.prototype.getSpritePath = function(flavor){
     switch(this.flavor){
         case 0:
-            return './blueSegment.jpg';
+            return './blueSegment.png';
         case 1:
-            return './greenSegment.jpg';
+            return './greenSegment.png';
         case 2:
-            return './orangeSegment.jpg';
+            return './orangeSegment.png';
         case 3:
-            return './pinkSegment.jpg';
+            return './pinkSegment.png';
         case 4:
-            return './yellowSegment.jpg';
+            return './yellowSegment.png';
     }
 }
 
