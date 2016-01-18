@@ -4,28 +4,28 @@ var Io = require('socket.io');
 var Game = require('./game');
 
 
-var game = new Game().start();
-var app = strapApp(express());
 var server = http.createServer();
+server.listen(9999);
 
-
+var app = strapApp(express());
 app.use('/', express.static('../client/dist/production'));
-
 server.on('request', app);
 
+
+var game = new Game().start();
 Io(server)
     .on('connection', function(socket){
 
         var player = game.createPlayer({
-            socket: socket
+            socket: socket,
         });
 
         socket.on('disconnect', function(){
             game.removePlayer(player);
         });
+
     });
 
-server.listen(9999);
 
 
 function strapApp(app){

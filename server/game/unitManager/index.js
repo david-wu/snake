@@ -8,26 +8,6 @@ function UnitManager(options){
     this.diffs = [];
 }
 
-UnitManager.prototype.tick = function(tickCount){
-    var that = this;
-    this.diffs = [];
-
-    if(tickCount%10 === 0){
-        this.spawnMaxFood();
-    }
-
-    _.each(this.unitGroups.snake, function(snake){
-        snake.tick();
-        that.diffs.push(snake.state());
-        _.each(snake.segments, function(segment){
-            that.diffs.push(segment.state());
-        });
-    });
-
-    this.board.checkCollisions(this.unitGroups.snake);
-    this.stateDiffsCache = this.stateDiffs();
-};
-
 UnitManager.prototype.addUnit = function(unit){
     unit.manager = this;
 
@@ -54,6 +34,26 @@ UnitManager.prototype.createUnit = function(modelName, unitOptions, spawnRange){
     var unit = new UnitModel(unitOptions);
     unit.pos = spawnRange ? randomPos(spawnRange) : unit.pos;
     return this.addUnit(unit);
+};
+
+UnitManager.prototype.tick = function(tickCount){
+    var that = this;
+    this.diffs = [];
+
+    if(tickCount%10 === 0){
+        this.spawnMaxFood();
+    }
+
+    _.each(this.unitGroups.snake, function(snake){
+        snake.tick();
+        that.diffs.push(snake.state());
+        _.each(snake.segments, function(segment){
+            that.diffs.push(segment.state());
+        });
+    });
+
+    this.board.checkCollisions(this.unitGroups.snake);
+    this.stateDiffsCache = this.stateDiffs();
 };
 
 UnitManager.prototype.spawnMaxFood = function(){

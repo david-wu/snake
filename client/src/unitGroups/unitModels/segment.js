@@ -22,16 +22,24 @@ Segment.prototype.constructor = BaseUnit;
 Segment.prototype.getSpritePath = function(flavor){
     switch(this.flavor){
         case 0:
-            return './blueSegment.png';
+            return './gems/Gems_01_256x256_015.png';
         case 1:
-            return './greenSegment.png';
+            return './gems/Gems_01_256x256_020.png';
         case 2:
-            return './orangeSegment.png';
+            return './gems/Gems_01_256x256_017.png';
         case 3:
-            return './pinkSegment.png';
+            return './gems/Gems_01_256x256_018.png';
         case 4:
-            return './yellowSegment.png';
+            return './gems/Gems_01_256x256_019.png';
+        case 5:
+            return './gems/Gems_01_256x256_020.png';
+        case 6:
+            return './gems/Gems_01_256x256_021.png';
     }
 }
 
 module.exports = Segment;
+
+
+// function SegmentFactory(){
+// }

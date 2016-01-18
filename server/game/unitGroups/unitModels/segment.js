@@ -5,8 +5,15 @@ var BaseUnit = require('./_baseUnit');
 function Segment(options){
     BaseUnit.call(this);
     this.type = 'segment';
+    this.pos = {x:0, y:0};
+    this.vel = {x:0, y:0};
     _.extend(this, options);
 }
+
+Segment.configs = {
+    name: 'segment',
+    Constructor: Segment,
+};
 
 
 Segment.prototype = Object.create(BaseUnit.prototype);
@@ -19,7 +26,7 @@ Segment.prototype.collideWith = function(things){
     _.eachRight(things, function(thing){
         if(thing.type === 'segment'){
             if(that.snake){
-                that.snake.segments.push(thing)
+                that.snake.segments.push(thing);
             }
             if(thing.snake && that.snake){
                 if(thing.index === 0){

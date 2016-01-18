@@ -2,6 +2,7 @@ _ = require('lodash');
 var io = require('socket.io-client');
 var Renderer = require('./renderer');
 var Stage = require('./stage');
+var UnitGroups = require('./unitGroups')
 var Hud = require('./hud');
 var KeyListener = require('./keyListener.js')
 
@@ -26,7 +27,6 @@ var hud = new Hud({
 });
 rootContainer.addChild(hud.container);
 
-var UnitGroups = require('./unitGroups')
 var unitGroups = new UnitGroups();
 stage.container.addChild(unitGroups.container);
 

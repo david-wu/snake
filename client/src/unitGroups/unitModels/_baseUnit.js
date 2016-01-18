@@ -23,8 +23,8 @@ BaseUnit.prototype.destroy = function(){
     this.parent.remove(this);
 };
 
-BaseUnit.prototype.defaultSprite = function(){
-    var sprite = new PIXI.Sprite.fromImage(this.spritePath || './pie.jpg');
+BaseUnit.prototype.defaultSprite = function(path){
+    var sprite = new PIXI.Sprite.fromImage(path || this.spritePath || './pie.jpg');
     sprite.anchor.x = 0.5;
     sprite.anchor.y = 0.5;
     sprite.width = 50;
