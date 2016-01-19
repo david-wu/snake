@@ -10,7 +10,7 @@ function Segment(options){
         type: 'segment',
         pos: {x:0, y:0},
         vel: {x:0, y:0},
-    })
+    });
 }
 
 Segment.configs = {
