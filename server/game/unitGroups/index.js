@@ -35,11 +35,10 @@ UnitGroups.prototype.createUnit = function(tag, options){
 UnitGroups.prototype.createSnake = function(){
     var snake = this.createUnit('snake', {});
     var snakeHead = this.createUnit('segment', {
-        snake: snake,
         flavor: _.random(4),
     });
     snakeHead.randomizePosition();
-    snake.segments.push(snakeHead);
+    snake.addSegment(snakeHead);
 
     return snake;
 };

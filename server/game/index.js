@@ -22,6 +22,7 @@ Game.prototype.createPlayer = function(options){
 Game.prototype.removePlayer = function(player){
     this.playerManager.removePlayer(player);
     player.snake.remove();
+    player.snake.freeSegments();
 };
 
 Game.prototype.tick = function(){

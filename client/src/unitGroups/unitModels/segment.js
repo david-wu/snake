@@ -32,9 +32,10 @@ Segment.prototype.getSpritePath = function(flavor){
         case 4:
             return './gems/Gems_01_256x256_019.png';
         case 5:
-            return './gems/Gems_01_256x256_020.png';
-        case 6:
             return './gems/Gems_01_256x256_021.png';
+        case 6:
+            return './gems/Gems_01_256x256_016.png';
+
     }
 }
 

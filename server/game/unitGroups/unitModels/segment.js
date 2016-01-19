@@ -21,19 +21,36 @@ Segment.prototype.constructor = BaseUnit;
 
 
 Segment.prototype.collideWith = function(things){
+
     var that = this;
+
     _.eachRight(things, function(thing){
-        if(thing.type === 'segment'){
-            if(that.snake){
-                that.snake.segments.push(thing);
-            }
-            if(thing.snake && that.snake){
-                if(thing.index === 0){
-                    thing.snake.remove();
+
+        if(that.snake && thing.type === 'segment'){
+
+            if(thing.snake){
+
+                if(thing.snake === that.snake){
+
+                    if(Math.abs(thing.index - that.index) > 3){
+                        thing.snake.remove();
+                        thing.snake.freeSegments();
+                    }
+
                 }else{
-                    that.snake.remove();
+                    if(thing.index === 0){
+                        thing.snake.remove();
+                        thing.snake.freeSegments();
+                    }else{
+                        that.snake.remove();
+                        that.snake.freeSegments();
+                    }
                 }
+
+            }else{
+                that.snake.addSegment(thing);
             }
+
         }
     });
 };
