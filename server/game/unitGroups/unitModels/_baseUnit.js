@@ -15,7 +15,10 @@ BaseUnit.prototype.moveTo = function(x,y){
     this.pos.x = x;
     this.pos.y = y;
     this.board.addUnit(this);
-    this.diffs.push(this.state());
+    this.diffs.push({
+        id: this.id,
+        pos: this.pos,
+    })
 };
 
 BaseUnit.prototype.remove = function(){
