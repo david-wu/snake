@@ -19,7 +19,6 @@ function UnitGroup(options){
 }
 
 UnitGroup.prototype.add = function(unit){
-    unit.parent = this;
     this.units.push(unit);
     this.container.addChild(unit.container);
     return this.unitsById[unit.id] = unit;
@@ -32,6 +31,7 @@ UnitGroup.prototype.remove = function(unit){
 };
 
 UnitGroup.prototype.create = function(options){
+    options.parent = this;
     return this.add(new this.Constructor(options));
 }
 
@@ -51,7 +51,7 @@ UnitGroup.prototype.processDiff = function(diff){
     }else if(diff.action === 'remove'){
         this.remove(this.unitsById[diff.id]);
     }else{
-        _.extend(unit, diff)
+        _.extend(unit, diff);
     }
     return unit;
 };

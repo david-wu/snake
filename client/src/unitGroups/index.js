@@ -9,7 +9,6 @@ function UnitGroups(){
 }
 
 UnitGroups.prototype.add = function(group){
-    group.parent = this;
     this.groupsByName[group.name] = group;
     this.container.addChild(group.container);
 };
@@ -20,6 +19,7 @@ UnitGroups.prototype.remove = function(group){
 };
 
 UnitGroups.prototype.create = function(options){
+    options.parent = this;
     this.add(new UnitGroup(options));
 };
 

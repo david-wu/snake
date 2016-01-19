@@ -24,6 +24,13 @@ Io(server)
             game.removePlayer(player);
         });
 
+        socket.on('newSnake', function(){
+            game.removePlayer(player);
+            player = game.createPlayer({
+                socket: socket,
+            });
+        });
+
     });
 
 

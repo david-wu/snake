@@ -7,5 +7,4 @@ var allModels = _.indexBy([Segment, Snake], function(d){
 });
 
 _.extend(allModels, Segments);
-
 module.exports = allModels;

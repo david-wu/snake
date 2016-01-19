@@ -3,7 +3,6 @@ var _ = require('lodash');
 
 
 function UnitGroup(options){
-    // _.extend(this, options);
     this.name = options.name;
     this.Constructor = options.Constructor;
 
@@ -30,6 +29,7 @@ UnitGroup.prototype.remove = function(unit){
     _.pull(this.units, unit);
     this.board.removeUnit(unit);
     this.diffs.push({
+        type: unit.type,
         action: 'removeUnit',
         data: unit.state(),
     });
@@ -38,14 +38,12 @@ UnitGroup.prototype.remove = function(unit){
 };
 
 UnitGroup.prototype.create = function(options){
+    options.parent = this;
     options.board = this.board;
     options.diffs = this.diffs;
     var unit = new this.Constructor(options);
 
-    unit.remove = this.remove.bind(this, unit);
-    this.add(unit);
-
-    return unit;
+    return this.add(unit);
 }
 
 UnitGroup.prototype.tick = function(){
@@ -57,12 +55,6 @@ UnitGroup.prototype.tick = function(){
         }
     }
 };
-
-// UnitGroup.prototype.processDiffs = function(diffs){
-//     _.each(diffs, function(diff){
-
-//     });
-// };
 
 module.exports = UnitGroup;
 

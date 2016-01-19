@@ -1,11 +1,10 @@
 var BaseUnit = require('./_baseUnit.js')
 
 
-
 function Segment(options){
     BaseUnit.call(this);
-    this.id = options.id;
-    this.flavor = options.flavor;
+    _.extend(this, options)
+
     this.spritePath = this.getSpritePath(options.flavor);
     this.container = this.defaultSprite();
 }
@@ -13,7 +12,7 @@ function Segment(options){
 Segment.configs = {
     name: 'segment',
     Constructor: Segment,
-    // particle: true,
+    particle: false,
 };
 
 Segment.prototype = Object.create(BaseUnit.prototype);

@@ -20,6 +20,11 @@ Player.prototype.commandHandler = function(command){
         if(!this.snake){return;}
         var head = _.last(this.snake.segments);
         if(!head){return;}
+        if(this.snake.segments.length > 1){
+            if(command.vel.x === -head.vel.x && command.vel.y === -head.vel.y){
+                return;
+            }
+        }
         head.vel = command.vel;
     }
 };

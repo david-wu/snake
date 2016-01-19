@@ -12,6 +12,7 @@ function Hud(options){
         {
             name: 'restart',
             click: function(e){
+                that.socket.emit('newSnake');
                 console.log('restart')
             },
         },

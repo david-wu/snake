@@ -14,7 +14,7 @@ Game.prototype.createPlayer = function(options){
     player.snake = this.unitGroups.createSnake();
 
     player.socket.emit('diffs', this.unitGroups.initialDiffs());
-    player.socket.emit('myCenterUnit', player.snake.segments[0].state());
+    player.socket.emit('mySnake', player.snake.state());
 
     return player;
 };
@@ -22,7 +22,6 @@ Game.prototype.createPlayer = function(options){
 Game.prototype.removePlayer = function(player){
     this.playerManager.removePlayer(player);
     player.snake.remove();
-    player.snake.freeSegments();
 };
 
 Game.prototype.tick = function(){

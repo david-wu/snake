@@ -6,6 +6,19 @@ var UnitGroups = require('./unitGroups')
 var Hud = require('./hud');
 var KeyListener = require('./keyListener.js')
 
+var socket = io.connect(location.origin);
+
+socket.on('diffs', function(diffs){
+    _.each(diffs, function(diff){
+        unitGroups.processDiff(diff);
+    });
+});
+
+socket.on('mySnake', function(diff){
+    var snake = unitGroups.processDiff(diff)
+    stage.centerSnake = snake;
+});
+
 
 var rootContainer = new PIXI.Container();
 var renderer = new Renderer();
@@ -23,6 +36,7 @@ var stage = new Stage({
 rootContainer.addChild(stage.container);
 
 var hud = new Hud({
+    socket: socket,
     renderer: renderer,
 });
 rootContainer.addChild(hud.container);
@@ -30,19 +44,6 @@ rootContainer.addChild(hud.container);
 var unitGroups = new UnitGroups();
 stage.container.addChild(unitGroups.container);
 
-
-var socket = io.connect(location.origin);
-
-socket.on('diffs', function(diffs){
-    _.each(diffs, function(diff){
-        unitGroups.processDiff(diff);
-    });
-});
-
-socket.on('myCenterUnit', function(diff){
-    var unit = unitGroups.processDiff(diff)
-    stage.centerUnit = unit;
-});
 
 
 
