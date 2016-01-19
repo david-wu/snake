@@ -14,11 +14,12 @@ function UnitGroup(options){
 
     setInterval(function(){
         this.draw()
-    }.bind(this), 16)
+    }.bind(this), 16);
 
 }
 
 UnitGroup.prototype.add = function(unit){
+    unit.parent = this;
     this.units.push(unit);
     this.container.addChild(unit.container);
     return this.unitsById[unit.id] = unit;
@@ -31,7 +32,6 @@ UnitGroup.prototype.remove = function(unit){
 };
 
 UnitGroup.prototype.create = function(options){
-    options.parent = this;
     return this.add(new this.Constructor(options));
 }
 

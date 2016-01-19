@@ -18,11 +18,9 @@ Player.prototype.sendId = function(){
 Player.prototype.commandHandler = function(command){
     if(command.type === 'setVel'){
         if(!this.snake){return;}
-        if(this.controlsInverted){
-            command.vel.x = -command.vel.x;
-            command.vel.y = -command.vel.y;
-        }
-        this.snake.segments[0].vel = command.vel;
+        var head = _.last(this.snake.segments);
+        if(!head){return;}
+        head.vel = command.vel;
     }
 };
 
