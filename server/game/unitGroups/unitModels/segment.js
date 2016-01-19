@@ -4,10 +4,13 @@ var BaseUnit = require('./_baseUnit');
 
 function Segment(options){
     BaseUnit.call(this);
-    this.type = 'segment';
-    this.pos = {x:0, y:0};
-    this.vel = {x:0, y:0};
+
     _.extend(this, options);
+    _.defaults(this, {
+        type: 'segment',
+        pos: {x:0, y:0},
+        vel: {x:0, y:0},
+    })
 }
 
 Segment.configs = {
@@ -24,7 +27,7 @@ Segment.prototype.collideWith = function(things){
 
     var that = this;
 
-    _.eachRight(things, function(thing){
+    _.each(things, function(thing){
 
         if(that.snake && thing.type === 'segment'){
 
@@ -34,24 +37,21 @@ Segment.prototype.collideWith = function(things){
 
                     if(Math.abs(thing.index - that.index) > 3){
                         thing.snake.remove();
-                        thing.snake.freeSegments();
                     }
 
                 }else{
                     if(thing.index === 0){
                         thing.snake.remove();
-                        thing.snake.freeSegments();
                     }else{
                         that.snake.remove();
-                        that.snake.freeSegments();
                     }
                 }
 
             }else{
                 that.snake.addSegment(thing);
             }
-
         }
+
     });
 };
 

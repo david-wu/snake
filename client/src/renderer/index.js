@@ -13,7 +13,6 @@ function Renderer(){
     renderer.fullScreenEl = fullScreenEl;
     renderer.autoResize = true;
     renderer.view.style.backgroundColor = 'black';
-    console.log(renderer.view)
 
     window.addEventListener('resize', function(){
         renderer.resize(window.innerWidth, window.innerHeight)

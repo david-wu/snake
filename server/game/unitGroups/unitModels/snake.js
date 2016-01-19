@@ -4,12 +4,12 @@ var Segment = require('./segment.js');
 
 function Snake(options){
     BaseUnit.call(this);
+
     _.extend(this, options);
-
-    this.type = 'snake';
-
-    this.segments = [];
-    this.user = options.user;
+    _.defaults(this, {
+        type: 'snake',
+        segments: [],
+    });
 }
 
 Snake.configs = {
@@ -21,6 +21,7 @@ Snake.configs = {
 Snake.prototype = Object.create(BaseUnit.prototype);
 Snake.prototype.constructor = BaseUnit;
 
+
 Snake.prototype.addSegment = function(segment){
     var head = _.last(this.segments);
     segment.pos = head ? _.clone(head.pos) : segment.pos;
@@ -29,7 +30,15 @@ Snake.prototype.addSegment = function(segment){
     segment.index = this.segments.length;
 
     this.segments.push(segment);
+    this.diffs.push(this.state());
 };
+
+Snake.prototype.remove = function(){
+    if(this.parent){
+        this.parent.remove(this);
+    }
+    this.freeSegments();
+}
 
 Snake.prototype.freeSegments = function(){
     _.each(this.segments, function(segment){
@@ -38,7 +47,7 @@ Snake.prototype.freeSegments = function(){
     this.segments.length = 0;
 };
 
-Snake.prototype.tick = function(diffs){
+Snake.prototype.tick = function(){
 
     for(var i=0; i < this.segments.length-1; i++){
         this.segments[i].moveTo(this.segments[i+1].pos.x, this.segments[i+1].pos.y);
@@ -51,7 +60,6 @@ Snake.prototype.tick = function(diffs){
 
 };
 
-// State as far as the client is concerned
 Snake.prototype.state = function(){
     return {
         id: this.id,

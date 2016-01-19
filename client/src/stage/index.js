@@ -64,6 +64,10 @@ Stage.prototype.transformContainer = function(){
 };
 
 Stage.prototype.centerPos = function(){
+    if(this.centerSnake){
+        return this.centerSnake.getHead().pos;
+        // console.log(this.centerSnake.getHead())
+    }
     return this.centerUnit ? this.centerUnit.pos : {x:0, y:0};
 };
 

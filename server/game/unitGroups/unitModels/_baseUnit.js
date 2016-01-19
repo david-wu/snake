@@ -16,18 +16,11 @@ BaseUnit.prototype.moveTo = function(x,y){
     this.pos.y = y;
     this.board.addUnit(this);
     this.diffs.push(this.state());
-}
-
-BaseUnit.prototype.processAttrs = function(attrs){
-    var that = this;
-    _.each(attrs, function(value, attrName){
-        _.set(that, attrName, value);
-    });
 };
 
 BaseUnit.prototype.remove = function(){
-    if(this.manager){
-        this.manager.removeUnit(this);
+    if(this.parent){
+        this.parent.remove(this);
     }
 };
 

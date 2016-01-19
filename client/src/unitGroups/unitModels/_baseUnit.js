@@ -34,8 +34,6 @@ BaseUnit.prototype.defaultSprite = function(path){
 
 BaseUnit.prototype.draw = function(){
     if(!this.pos){return;}
-    // this.container.position.x = this.pos.x*50;
-    // this.container.position.y = this.pos.y*50;
 
     this.container.position.x = this.container.position.x || this.pos.x*50;
     this.container.position.y = this.container.position.y || this.pos.y*50;
@@ -45,6 +43,9 @@ BaseUnit.prototype.draw = function(){
     this.container.position.y += deltaY/5;
 };
 
+BaseUnit.prototype.toString = function(){
+    return this.id;
+}
 
 module.exports = BaseUnit;
 
