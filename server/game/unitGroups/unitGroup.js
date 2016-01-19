@@ -50,9 +50,19 @@ UnitGroup.prototype.create = function(options){
 
 UnitGroup.prototype.tick = function(){
     for(var i=0, l=this.units.length; i<l; i++){
-        this.units[i].tick();
+
+        // ticking triggers collisions that can remove units
+        if(this.units[i]){
+            this.units[i].tick();
+        }
     }
 };
+
+// UnitGroup.prototype.processDiffs = function(diffs){
+//     _.each(diffs, function(diff){
+
+//     });
+// };
 
 module.exports = UnitGroup;
 

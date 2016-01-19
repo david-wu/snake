@@ -32,11 +32,25 @@ UnitGroups.prototype.createUnit = function(tag, options){
     return this.groupsByName[tag].create(options);
 };
 
+UnitGroups.prototype.createSnake = function(){
+    var snake = this.createUnit('snake', {});
+    var snakeHead = this.createUnit('segment', {
+        snake: snake,
+        flavor: _.random(4),
+    });
+    snakeHead.randomizePosition();
+    snake.segments.push(snakeHead);
+
+    return snake;
+};
+
 UnitGroups.prototype.tick = function(){
     this.diffs.length = 0;
     _.each(this.groupsByName, function(group){
         group.tick();
     });
+
+    // this.processDiffs(this.diffs);
 };
 
 UnitGroups.prototype.initModelGroups = function(){
@@ -46,7 +60,7 @@ UnitGroups.prototype.initModelGroups = function(){
     });
 };
 
-UnitGroups.prototype.createInitDiffs = function(){
+UnitGroups.prototype.initialDiffs = function(){
     var initDiffs = [];
     _.each(this.groupsByName, function(group){
         _.each(group.units, function(unit){
@@ -55,6 +69,13 @@ UnitGroups.prototype.createInitDiffs = function(){
     });
     return initDiffs;
 }
+
+// UnitGroups.prototype.processDiffs = function(diffs){
+//     var that = this;
+//     _.each(diffs, function(diff){
+//         that.groupsByName[diff.type].processDiff(diffs);
+//     });
+// };
 
 module.exports = UnitGroups;
 

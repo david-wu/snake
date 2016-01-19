@@ -22,7 +22,6 @@ Segment.prototype.constructor = BaseUnit;
 
 Segment.prototype.collideWith = function(things){
     var that = this;
-
     _.eachRight(things, function(thing){
         if(thing.type === 'segment'){
             if(that.snake){
@@ -36,13 +35,8 @@ Segment.prototype.collideWith = function(things){
                 }
             }
         }
-        // if(thing.type === 'powerup'){
-        //     that.snake.user.invertControls();
-        //     thing.remove();
-        // }
     });
 };
-
 
 Segment.prototype.state = function(){
     return {

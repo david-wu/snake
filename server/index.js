@@ -27,7 +27,6 @@ Io(server)
     });
 
 
-
 function strapApp(app){
     var cors = require('cors');
     var bodyParser = require('body-parser');

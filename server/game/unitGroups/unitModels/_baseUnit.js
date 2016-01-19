@@ -6,6 +6,10 @@ function BaseUnit(){
     this.id = unitId++;
 }
 
+BaseUnit.prototype.tick = function(){};
+
+BaseUnit.prototype.collideWith = function(){};
+
 BaseUnit.prototype.moveTo = function(x,y){
     this.board.removeUnit(this);
     this.pos.x = x;
@@ -13,10 +17,6 @@ BaseUnit.prototype.moveTo = function(x,y){
     this.board.addUnit(this);
     this.diffs.push(this.state());
 }
-
-BaseUnit.prototype.tick = function(){};
-
-BaseUnit.prototype.collideWith = function(){};
 
 BaseUnit.prototype.processAttrs = function(attrs){
     var that = this;
