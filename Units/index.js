@@ -55,9 +55,12 @@ Units.prototype.createUnit = function(type, options){
 
 // returns diffs
 Units.prototype.tick = function(){
-
+    var diffs = [];
+    _.each(this.units, function(unit){
+        diffs.push.apply(diffs, unit.tick());
+    });
+    return diffs;
 };
-
 
 Units.prototype.processDiff = function(diff){
     actions[diff.action](diff.payload);
@@ -73,7 +76,9 @@ var actions = {
 
 
 Units.prototype.draw = function(){
-
+    _.each(this.units, function(unit){
+        unit.draw();
+    });
 };
 
 
